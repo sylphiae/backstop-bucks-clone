@@ -1,0 +1,6 @@
+/*.log
+/.idea
+/target
+/*-init.clj
+/resources/public/js/compiled
+out
