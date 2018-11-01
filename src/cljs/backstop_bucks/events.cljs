@@ -1,7 +1,7 @@
-(ns my-re-frame.events
+(ns backstop-bucks.events
   (:require
    [re-frame.core :as re-frame]
-   [my-re-frame.db :as db]
+   [backstop-bucks.db :as db]
    ))
 
 (re-frame/reg-event-db

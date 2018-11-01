@@ -1,10 +1,10 @@
-(ns my-re-frame.core
+(ns backstop-bucks.core
   (:require
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
-   [my-re-frame.events :as events]
-   [my-re-frame.views :as views]
-   [my-re-frame.config :as config]
+   [backstop-bucks.events :as events]
+   [backstop-bucks.views :as views]
+   [backstop-bucks.config :as config]
    ))
 
 
