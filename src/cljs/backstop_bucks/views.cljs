@@ -3,6 +3,8 @@
    [re-frame.core :as re-frame]
    [reagent.core :as reagent]
    [backstop-bucks.subs :as subs]
+   [baking-soda.core :as b]
+   [backstop_bucks.components.redeem_button :refer [redeem-button]]
    ))
 
 ;(defn color-input []
@@ -26,6 +28,11 @@
     [:div (into [:ol] unredeemed-lis)])
   )
 
+
+; flexbox or grid?
+; react router - secretary
+; baking soda, material-ui
+
 (defn main-panel []
   (let [first-name (re-frame/subscribe [::subs/name])
         color (re-frame/subscribe [::subs/color])
@@ -37,6 +44,7 @@
       @first-name "'s Backstop Bucks Home Page"]
      [:h3 "Backstop Bucks: $" @bucks]
      [:h3 "Unredeemed Rewards: " @unredeemed-rewards-count]
+     [redeem-button]
      [unredeemed-rewards]
      [:h3 "Redeemed Rewards: " @redeemed-rewards-count]
      [redeemed-rewards]

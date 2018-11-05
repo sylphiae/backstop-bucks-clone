@@ -1,8 +1,14 @@
 (defproject backstop-bucks "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
-                 [reagent "0.7.0"]
-                 [re-frame "0.10.5"]]
+                 [re-frame "0.10.5"]
+                 [baking-soda "0.2.0"]
+                 [reagent "0.8.1" :exclusions [cljsjs/react
+                                               cljsjs/react-dom]]
+                 [cljsjs/react "16.3.2-0"]
+                 [cljsjs/react-dom "16.3.2-0"]
+                 [cljsjs/react-transition-group "2.3.1-0"]
+                 [cljsjs/react-popper "0.10.4-0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
@@ -12,13 +18,19 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
+  :minify-assets
+  {:assets
+   {"resources/public/css/site.min.css" "resources/public/css/spacelab.css"}}
+
   :figwheel {:css-dirs ["resources/public/css"]}
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "0.9.10"]]
+   {:dependencies [[binaryage/devtools "0.9.10"]
+                   [cljsjs/react-bootstrap "0.31.5-0"]]
 
-    :plugins      [[lein-figwheel "0.5.16"]]}
+    :plugins      [[lein-cljsbuild "1.1.1"]
+                   [lein-figwheel "0.5.16"]]}
    :prod { }
    }
 
