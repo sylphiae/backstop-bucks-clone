@@ -4,5 +4,5 @@
   {:name "Jenny"
    :color "#00f"
    :bucks 100
-   :redeemed-rewards '("Coupon" "Candy")
+   :redeemed-rewards [{:reward-name "Coupon"} {:reward-name "Candy"}]
    :unredeemed-rewards '("Phone charger" "Beer" "Gift Card")})

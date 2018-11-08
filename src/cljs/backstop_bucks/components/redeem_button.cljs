@@ -1,4 +1,4 @@
-(ns backstop_bucks.components.redeem_button
+(ns backstop-bucks.components.redeem-button
   (:require [reagent.core :as reagent :refer [atom with-let]]
             [baking-soda.core :as b]))
 

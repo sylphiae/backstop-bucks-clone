@@ -1,8 +1,7 @@
 (ns backstop-bucks.events
   (:require
    [re-frame.core :as re-frame]
-   [backstop-bucks.db :as db]
-   ))
+   [backstop-bucks.db :as db]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -10,12 +9,11 @@
    db/default-db))
 
 (re-frame/reg-event-db
-:name-color-change
-(fn [db [_ new-color-value]]
-  (assoc db :color new-color-value)))
+ :name-color-change
+ (fn [db [_ new-color-value]]
+   (assoc db :color new-color-value)))
 
 (re-frame/reg-event-db
-  :name-change
-  (fn [db [_ new-name-value]]
-    (assoc db :name new-name-value))
-  )
+ :name-change
+ (fn [db [_ new-name-value]]
+   (assoc db :name new-name-value)))

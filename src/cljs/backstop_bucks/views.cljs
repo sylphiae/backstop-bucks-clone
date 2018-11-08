@@ -4,34 +4,15 @@
    [reagent.core :as reagent]
    [backstop-bucks.subs :as subs]
    [baking-soda.core :as b]
-   [backstop_bucks.components.redeem_button :refer [redeem-button]]
-   ))
-
-;(defn color-input []
-;  (let [color (re-frame/subscribe [::subs/color])]
-;  [:div.color-input
-;   "The color is: "
-;   [:input {:type "text"
-;            :value @color
-;            :on-change #(re-frame/dispatch [:name-color-change (-> % .-target .-value)])}]
-;   ]))
-
-(defn redeemed-rewards []
-  (reagent/with-let [redeemed-rewards (re-frame/subscribe [::subs/redeemed-rewards])
-                    lis (mapv #(conj [:li] %) @redeemed-rewards)]
-    [:div (into [:ol] lis)])
-  )
+   [backstop-bucks.components.redeem-button :refer [redeem-button]]
+   [backstop-bucks.components.rewards-table :refer [rewards-table]]))
 
 (defn unredeemed-rewards []
   (reagent/with-let [unredeemed-rewards (re-frame/subscribe [::subs/unredeemed-rewards])
                      unredeemed-lis (mapv #(conj [:li] %) @unredeemed-rewards)]
-    [:div (into [:ol] unredeemed-lis)])
-  )
+    [:div (into [:ol] unredeemed-lis)]))
 
-
-; flexbox or grid?
 ; react router - secretary
-; baking soda, material-ui
 
 (defn main-panel []
   (let [first-name (re-frame/subscribe [::subs/name])
@@ -47,6 +28,4 @@
      [redeem-button]
      [unredeemed-rewards]
      [:h3 "Redeemed Rewards: " @redeemed-rewards-count]
-     [redeemed-rewards]
-     ])
-  )
+     [rewards-table {:rewards-subscription [::subs/redeemed-rewards]}]]))

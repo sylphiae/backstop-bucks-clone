@@ -30,7 +30,8 @@
                    [cljsjs/react-bootstrap "0.31.5-0"]]
 
     :plugins      [[lein-cljsbuild "1.1.1"]
-                   [lein-figwheel "0.5.16"]]}
+                   [lein-figwheel "0.5.16"]
+                   [lein-cljfmt "0.6.1"]]}
    :prod { }
    }
 
