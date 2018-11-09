@@ -8,11 +8,6 @@
    (:name db)))
 
 (re-frame/reg-sub
- ::color
- (fn [db]
-   (:color db)))
-
-(re-frame/reg-sub
  ::bucks
  (fn [db]
    (:bucks db)))

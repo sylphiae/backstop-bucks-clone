@@ -7,7 +7,7 @@
   [:tr
    [:td (inc index)]
    [:td (:reward-name reward)]
-   [:td]
+   [:td (:price reward)]
    [:td]])
 
 (defn rewards-table [props & children]

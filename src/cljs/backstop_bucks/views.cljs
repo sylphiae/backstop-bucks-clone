@@ -4,7 +4,7 @@
    [reagent.core :as reagent]
    [backstop-bucks.subs :as subs]
    [baking-soda.core :as b]
-   [backstop-bucks.components.redeem-button :refer [redeem-button]]
+   [backstop-bucks.components.action-button :refer [action-button]]
    [backstop-bucks.components.rewards-table :refer [rewards-table]]))
 
 (defn unredeemed-rewards []
@@ -16,16 +16,18 @@
 
 (defn main-panel []
   (let [first-name (re-frame/subscribe [::subs/name])
-        color (re-frame/subscribe [::subs/color])
         bucks (re-frame/subscribe [::subs/bucks])
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
         unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])]
     [:div
-     [:h1 {:style {:color @color}}
+     [:h1
       @first-name "'s Backstop Bucks Home Page"]
-     [:h3 "Backstop Bucks: $" @bucks]
-     [:h3 "Unredeemed Rewards: " @unredeemed-rewards-count]
-     [redeem-button]
-     [unredeemed-rewards]
-     [:h3 "Redeemed Rewards: " @redeemed-rewards-count]
+     [:h3
+      "Backstop Bucks: $" @bucks]
+     [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
+     [action-button "Redeem"]
+     [action-button "Reject"]
+     [action-button "Trade"]
+     [rewards-table {:rewards-subscription [::subs/unredeemed-rewards]}]
+     [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [rewards-table {:rewards-subscription [::subs/redeemed-rewards]}]]))
