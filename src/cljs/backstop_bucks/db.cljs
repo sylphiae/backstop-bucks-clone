@@ -1,7 +1,9 @@
-(ns backstop-bucks.db)
+(ns backstop-bucks.db
+  (:require [backstop-bucks.user-home-page :as home-page]))
 
 (def default-db
-  {:name "Jenny"
+  {:page home-page/main-panel
+   :name "Jenny"
    :bucks 100
    :redeemed-rewards [{:reward-name "Coupon" :price 10} {:reward-name "Candy" :price 2}]
    :unredeemed-rewards [{:reward-name "Phone charger" :price 15}

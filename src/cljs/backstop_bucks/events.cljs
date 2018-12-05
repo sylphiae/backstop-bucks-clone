@@ -1,7 +1,8 @@
 (ns backstop-bucks.events
   (:require
    [re-frame.core :as re-frame]
-   [backstop-bucks.db :as db]))
+   [backstop-bucks.db :as db]
+   [backstop-bucks.views.user-trade :refer [user-trade]]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -9,9 +10,9 @@
    db/default-db))
 
 (re-frame/reg-event-db
- :name-color-change
- (fn [db [_ new-color-value]]
-   (assoc db :color new-color-value)))
+ :trade-button-click
+ (fn [db _]
+   (assoc db :page user-trade)))
 
 (re-frame/reg-event-db
  :name-change

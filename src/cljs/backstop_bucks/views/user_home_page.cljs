@@ -1,4 +1,4 @@
-(ns backstop-bucks.views
+(ns backstop-bucks.views.user-home-page
   (:require
    [re-frame.core :as re-frame]
    [reagent.core :as reagent]
@@ -25,9 +25,15 @@
      [:h3
       "Backstop Bucks: $" @bucks]
      [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
-     [action-button "Redeem"]
-     [action-button "Reject"]
-     [action-button "Trade"]
-     [rewards-table {:rewards-subscription [::subs/unredeemed-rewards]}]
+     [rewards-table {:rewards-subscription [::subs/unredeemed-rewards]}
+      [action-button "Redeem"]
+      [action-button "Reject"]
+      [action-button "Trade"]]
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [rewards-table {:rewards-subscription [::subs/redeemed-rewards]}]]))
+
+(comment "Actions user can take while on this page:
+Click on Redeem rewards
+Click on Reject rewards
+Click on trade rewards button to go to the trade page where you can click on trade Backstop Bucks button
+" )
