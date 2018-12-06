@@ -3,7 +3,7 @@
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [backstop-bucks.events :as events]
-   [backstop-bucks.user-home-page :as views]
+   [backstop-bucks.views.user-home-page :as views]
    [backstop-bucks.config :as config]))
 
 (defn dev-setup []

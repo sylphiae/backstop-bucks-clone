@@ -9,7 +9,7 @@
    [:td (inc index)]
    [:td (:reward-name reward)]
    [:td (:price reward)]
-   [:td (map #(util/clone-component % {placeholder}) actions)]])
+   [:td (map #(util/clone-component % {:index index}) actions)]])
 
 (defn rewards-table [props & children]
   (reagent/with-let [rewards (re-frame/subscribe (:rewards-subscription props))]

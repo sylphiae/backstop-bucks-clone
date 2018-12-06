@@ -1,5 +1,5 @@
 (ns backstop-bucks.db
-  (:require [backstop-bucks.user-home-page :as home-page]))
+  (:require [backstop-bucks.views.user-home-page :as home-page]))
 
 (def default-db
   {:page home-page/main-panel

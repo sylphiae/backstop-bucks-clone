@@ -26,9 +26,9 @@
       "Backstop Bucks: $" @bucks]
      [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
      [rewards-table {:rewards-subscription [::subs/unredeemed-rewards]}
-      [action-button "Redeem"]
-      [action-button "Reject"]
-      [action-button "Trade"]]
+      [action-button {:event :redeem-button-click} "Redeem"]
+      [action-button {:event :reject-button-click} "Reject"]
+      [action-button {:event :trade-button-click} "Trade"]]
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [rewards-table {:rewards-subscription [::subs/redeemed-rewards]}]]))
 
