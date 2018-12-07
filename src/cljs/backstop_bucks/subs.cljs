@@ -22,6 +22,10 @@
  (fn [db]
    (:unredeemed-rewards db)))
 
+(re-frame/reg-sub
+  ::page-view
+  (fn [db]
+      (:page db)))
 ;; --------------------------------------------------------
 
 (re-frame/reg-sub

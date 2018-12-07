@@ -2,7 +2,7 @@
   (:require [backstop-bucks.views.user-home-page :as home-page]))
 
 (def default-db
-  {:page home-page/main-panel
+  {:page #'home-page/main-panel
    :name "Jenny"
    :bucks 100
    :redeemed-rewards [{:reward-name "Coupon" :price 10} {:reward-name "Candy" :price 2}]

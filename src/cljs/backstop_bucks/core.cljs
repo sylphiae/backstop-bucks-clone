@@ -3,7 +3,7 @@
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [backstop-bucks.events :as events]
-   [backstop-bucks.views.user-home-page :as views]
+   [backstop-bucks.views.view :as views]
    [backstop-bucks.config :as config]))
 
 (defn dev-setup []
@@ -13,7 +13,7 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel]
+  (reagent/render [views/view-panel]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []

@@ -25,4 +25,4 @@
 (re-frame/reg-event-db
   :reject-button-click
   (fn [db [_ rejected-reward-index]]
-      (dissoc db :unredeemed-rewards (nth :unredeemed-rewards rejected-reward-index))))
+      (update-in db [:unredeemed-rewards] util/remove-index rejected-reward-index)))
