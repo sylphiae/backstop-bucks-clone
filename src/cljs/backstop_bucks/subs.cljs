@@ -13,6 +13,11 @@
    (:bucks db)))
 
 (re-frame/reg-sub
+  ::bucks-trade-amount
+  (fn [db]
+      (:bucks-trade-amount db)))
+
+(re-frame/reg-sub
  ::redeemed-rewards
  (fn [db]
    (:redeemed-rewards db)))
@@ -21,6 +26,11 @@
  ::unredeemed-rewards
  (fn [db]
    (:unredeemed-rewards db)))
+
+(re-frame/reg-sub
+  ::trade-targets
+  (fn [db]
+    (:users db)))
 
 (re-frame/reg-sub
   ::page-view
