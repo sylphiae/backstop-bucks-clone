@@ -32,3 +32,12 @@
   (fn [db [_ new-bucks-value]]
       (assoc db :bucks-trade-amount new-bucks-value))
   )
+
+(re-frame/reg-event-db
+  :trade-request-click
+  (fn [db [_ trade-request]]
+    (-> db
+      (assoc-in [:trade-requests] trade-request)
+      (assoc :bucks-trade-amount 0)
+      (doto (print :trade-requests))
+       )))

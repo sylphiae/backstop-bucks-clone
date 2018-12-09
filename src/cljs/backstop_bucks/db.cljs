@@ -10,4 +10,5 @@
    :unredeemed-rewards [{:reward-name "Phone charger" :price 15}
                         {:reward-name "Beer" :price 8}
                         {:reward-name "Gift Card" :price 20}]
-   :users [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]})
+   :users [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
+  :trade-requests []})

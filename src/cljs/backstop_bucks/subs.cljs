@@ -33,6 +33,11 @@
     (:users db)))
 
 (re-frame/reg-sub
+  ::trade-requests
+  (fn [db]
+    (:trade-requests db)))
+
+(re-frame/reg-sub
   ::page-view
   (fn [db]
       (:page db)))

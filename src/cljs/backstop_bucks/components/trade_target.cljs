@@ -5,10 +5,12 @@
             [reagent.core :as reagent :refer [atom with-let]]))
 
 (defn trade-target []
-  (reagent/with-let [trade-targets (re-frame/subscribe [::subs/trade-targets])]
+  (reagent/with-let [trade-targets (re-frame/subscribe [::subs/trade-targets])
+                     user-name (re-frame/subscribe [::subs/name])]
                     (print @trade-targets)
     [:div
+     "Who would you like to trade with?"
      [b/Input {:type "select"}
-      (map #(conj [:option] (:name %)) @trade-targets)
+      (map #(conj [:option] (:name %)) (remove #(= {:name @user-name} %) @trade-targets))
       ]
      ]))
