@@ -6,11 +6,13 @@
 
 (defn trade-target []
   (reagent/with-let [trade-targets (re-frame/subscribe [::subs/trade-targets])
-                     user-name (re-frame/subscribe [::subs/name])]
-                    (print @trade-targets)
+                     user-name (re-frame/subscribe [::subs/name])
+                     selected-trade-target (re-frame/subscribe [::subs/selected-trade-target])]
     [:div
      "Who would you like to trade with?"
-     [b/Input {:type "select"}
+     [b/Input {:type "select"
+               :value @selected-trade-target
+               :on-change #(re-frame/dispatch [:select-trade-target (-> % .-target .-value)])}
       (map #(conj [:option] (:name %)) (remove #(= {:name @user-name} %) @trade-targets))
       ]
      ]))

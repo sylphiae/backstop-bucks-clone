@@ -11,4 +11,6 @@
                         {:reward-name "Beer" :price 8}
                         {:reward-name "Gift Card" :price 20}]
    :users [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
-  :trade-requests []})
+   :trade-requests []
+   :selected-trade-target nil
+   })

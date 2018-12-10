@@ -7,5 +7,4 @@
 ;subscription to the current page
 (defn view-panel []
       (let [page-view (re-frame/subscribe [::subs/page-view])]
-           (print page-view)
            [:div (@page-view)]))

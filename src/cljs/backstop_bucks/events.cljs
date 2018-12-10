@@ -34,10 +34,16 @@
   )
 
 (re-frame/reg-event-db
+  :select-trade-target
+  (fn [db [_ trade-target-value]]
+    (assoc db :selected-trade-target trade-target-value))
+  )
+
+(re-frame/reg-event-db
   :trade-request-click
-  (fn [db [_ trade-request]]
+  (fn [db [_ trade-value trade-target]]
     (-> db
-      (assoc-in [:trade-requests] trade-request)
+      (assoc-in [:trade-requests (count (:trade-requests db))] {:trade-value trade-value :trade-target trade-target})
       (assoc :bucks-trade-amount 0)
-      (doto (print :trade-requests))
+      ;(doto (print :trade-requests))
        )))

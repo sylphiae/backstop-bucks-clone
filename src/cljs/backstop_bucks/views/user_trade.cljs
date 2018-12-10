@@ -8,13 +8,14 @@
 
 (defn user-trade []
       (reagent/with-let [first-name (re-frame/subscribe [::subs/name])
+                         selected-trade-target (re-frame/subscribe [::subs/selected-trade-target])
                          bucks-trade-request (re-frame/subscribe [::subs/bucks-trade-amount])]
       [:div
        [:h1 @first-name "'s Trade Page"]
        [:h2 "Trade Amount:"]
        [bucks-input]
        [trade-target]
-       [action-button {:event :trade-request-click :value @bucks-trade-request} "Request Backstop Bucks trade"]
+       [action-button {:value [@bucks-trade-request @selected-trade-target] :event :trade-request-click} "Request Backstop Bucks trade"]
        ]))
 
 (comment "Input the amount user would like to trade

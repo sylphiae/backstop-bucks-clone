@@ -41,6 +41,11 @@
   ::page-view
   (fn [db]
       (:page db)))
+
+(re-frame/reg-sub
+  ::selected-trade-target-primary
+  (fn [db]
+    (:selected-trade-target db)))
 ;; --------------------------------------------------------
 
 (re-frame/reg-sub
@@ -55,10 +60,17 @@
  :<- [::redeemed-rewards]
 
  (fn [redeemed-rewards]
-   (count
+   (count redeemed-rewards)))
 
+(re-frame/reg-sub
+  ::selected-trade-target
+  :<- [::trade-targets]
+  :<- [::name]
+  :<- [::selected-trade-target-primary]
+    (fn [[trade-targets user-name selected-trade-target-primary] _]
+      (if (nil? selected-trade-target-primary)
+        (first (remove #(= user-name (:name %)) trade-targets))
+        selected-trade-target-primary)))
 
-
-    redeemed-rewards)))
 
 
