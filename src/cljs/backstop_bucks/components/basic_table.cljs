@@ -1,25 +1,22 @@
-(ns backstop-bucks.components.rewards-table
+(ns backstop-bucks.components.basic-table
   (:require [reagent.core :as reagent :refer [atom with-let]]
             [baking-soda.core :as b]
             [re-frame.core :as re-frame]
             [backstop-bucks.util :as util]))
 
-(defn- reward->table-row [actions index reward]
+(defn- item->table-row [actions item-keys index item]
   [:tr
    [:td (inc index)]
-   [:td (:reward-name reward)]
-   [:td (:price reward)]
+   (map #(conj [:td] (% item)) item-keys)
    [:td (map #(util/clone-component % {:value [index]}) actions)]])
 
-(defn rewards-table [props & children]
-  (reagent/with-let [rewards (re-frame/subscribe (:rewards-subscription props))]
+(defn basic-table [props & children]
+  (reagent/with-let [table-items (re-frame/subscribe (:subscription-details props))]
     [:div
      [b/Table {:hover true}
       [:thead
        [:tr
-        [:th "#"]
-        [:th "Reward Name"]
-        [:th "Reward Value"]
+        (map #(conj [:th] %) (:column-names props))
         (when (< 0 (count children)) [:th "Actions"])]]
       (into [:tbody]
-            (map-indexed (partial reward->table-row children) @rewards))]]))
+            (map-indexed (partial item->table-row children (:column-keys props)) @table-items))]]))

@@ -1,11 +1,11 @@
 (ns backstop-bucks.views.user-home-page
   (:require
-   [re-frame.core :as re-frame]
-   [reagent.core :as reagent]
-   [backstop-bucks.subs :as subs]
-   [baking-soda.core :as b]
-   [backstop-bucks.components.action-button :refer [action-button]]
-   [backstop-bucks.components.rewards-table :refer [rewards-table]]))
+    [re-frame.core :as re-frame]
+    [reagent.core :as reagent]
+    [backstop-bucks.subs :as subs]
+    [baking-soda.core :as b]
+    [backstop-bucks.components.action-button :refer [action-button]]
+    [backstop-bucks.components.basic-table :refer [basic-table]]))
 
 (defn unredeemed-rewards []
   (reagent/with-let [unredeemed-rewards (re-frame/subscribe [::subs/unredeemed-rewards])
@@ -25,12 +25,16 @@
      [:h3
       "Backstop Bucks: $" @bucks]
      [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
-     [rewards-table {:rewards-subscription [::subs/unredeemed-rewards]}
+     [basic-table {:subscription-details [::subs/unredeemed-rewards]
+                   :column-names ["#" "Reward Name" "Reward Value"]
+                   :column-keys [:reward-name :price]}
       [action-button {:event :redeem-button-click} "Redeem"]
       [action-button {:event :reject-button-click} "Reject"]
       [action-button {:event :trade-button-click} "Trade"]]
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
-     [rewards-table {:rewards-subscription [::subs/redeemed-rewards]}]]))
+     [basic-table {:subscription-details [::subs/redeemed-rewards]
+                   :column-names ["#" "Reward Name" "Reward Value"]
+                   :column-keys [:reward-name :price]}]]))
 
 (comment "Actions user can take while on this page:
 Click on Redeem rewards

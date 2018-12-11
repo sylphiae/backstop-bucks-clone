@@ -8,3 +8,8 @@
 (defn view-panel []
       (let [page-view (re-frame/subscribe [::subs/page-view])]
            [:div (@page-view)]))
+
+(comment "Add nav bar
+Add page for viewing historical trades?")
+
+;container for react components to add margin buffers?

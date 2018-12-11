@@ -11,5 +11,6 @@
 
 (defn remove-index [coll pos]
       (vec (concat (subvec coll 0 pos) (subvec coll (inc pos)))))
+;dissoc-in for vectors
 
 
