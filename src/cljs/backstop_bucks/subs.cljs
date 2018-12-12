@@ -38,6 +38,11 @@
     (:trade-requests db)))
 
 (re-frame/reg-sub
+  ::pending-trades
+  (fn [db]
+    (:pending-trades db)))
+
+(re-frame/reg-sub
   ::page-view
   (fn [db]
       (:page db)))
@@ -61,6 +66,13 @@
 
  (fn [redeemed-rewards]
    (count redeemed-rewards)))
+
+(re-frame/reg-sub
+  ::pending-trades-count
+  :<- [::pending-trades]
+
+  (fn [pending-trades]
+    (count pending-trades)))
 
 (re-frame/reg-sub
   ::selected-trade-target

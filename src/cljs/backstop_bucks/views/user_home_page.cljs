@@ -29,7 +29,7 @@
                    :column-names ["#" "Reward Name" "Reward Value"]
                    :column-keys [:reward-name :price]}
       [action-button {:event :redeem-button-click} "Redeem"]
-      [action-button {:event :reject-button-click} "Reject"]
+      [action-button {:value [:unredeemed-rewards] :event :reject-button-click} "Reject"]
       [action-button {:event :trade-button-click} "Trade"]]
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [basic-table {:subscription-details [::subs/redeemed-rewards]

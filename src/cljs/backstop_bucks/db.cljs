@@ -13,4 +13,5 @@
    :users [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
    :trade-requests []
    :selected-trade-target nil
+   :pending-trades [{:reward-name "Pen" :price 40 :trader "Link"}]
    })

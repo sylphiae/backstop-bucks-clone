@@ -24,8 +24,8 @@
 
 (re-frame/reg-event-db
   :reject-button-click
-  (fn [db [_ rejected-reward-index]]
-      (update-in db [:unredeemed-rewards] util/remove-index rejected-reward-index)))
+  (fn [db [_ rejected-reward-index collection]]
+      (update-in db collection util/remove-index rejected-reward-index)))
 
 (re-frame/reg-event-db
   :bucks-input-change
