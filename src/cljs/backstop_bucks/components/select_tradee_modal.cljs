@@ -18,5 +18,5 @@
      ]
     [b/ModalFooter
      [action-button {:value [@select-tradee-modal-index @selected-trade-target] :event :modal-trade-button-click} "Request Trade"]
-     [action-button {:event :cancel-button-click} "Cancel"]
+     [action-button {:event :cancel-button-click :color "secondary"} "Cancel"]
      ]]]))

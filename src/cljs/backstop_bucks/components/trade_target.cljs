@@ -11,7 +11,7 @@
     [:div
      (str "Who would you like to trade \"" (:trade-category props) "\" with?")
      [b/Input {:type "select"
-               :value @selected-trade-target
+               :value (:name @selected-trade-target)
                :on-change #(re-frame/dispatch [:select-trade-target (-> % .-target .-value)])}
       ;% is javascript event
       (map #(conj [:option] (:name %)) (remove #(= {:name @user-name} %) @trade-targets))

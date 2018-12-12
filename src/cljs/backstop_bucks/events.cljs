@@ -12,8 +12,11 @@
 
 (re-frame/reg-event-db
   :trade-button-click
-  (fn [db _]
-      (assoc db :page user-trade)))
+  (fn [db [_ unredeemed-reward-index]]
+    (-> db
+      (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:unredeemed-rewards db) unredeemed-reward-index))
+      (update-in [:unredeemed-rewards] util/remove-index unredeemed-reward-index)
+      (assoc :page user-trade))))
 
 (re-frame/reg-event-db
   :redeem-button-click
@@ -42,7 +45,7 @@
 (re-frame/reg-event-db
   :select-trade-target
   (fn [db [_ trade-target-value]]
-    (assoc db :selected-trade-target trade-target-value))
+    (assoc db :selected-trade-target {:name trade-target-value}))
   )
 
 (re-frame/reg-event-db
