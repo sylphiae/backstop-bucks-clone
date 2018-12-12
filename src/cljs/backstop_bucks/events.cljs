@@ -27,6 +27,12 @@
   (fn [db [_ rejected-reward-index collection]]
       (update-in db collection util/remove-index rejected-reward-index)))
 
+;this event handler is going to do more when there is an actual database and other users to interact with
+(re-frame/reg-event-db
+  :accept-button-click
+  (fn [db [_ accepted-reward-index]]
+    (update-in db [:pending-trades] util/remove-index accepted-reward-index)))
+
 (re-frame/reg-event-db
   :bucks-input-change
   (fn [db [_ new-bucks-value]]
@@ -47,3 +53,23 @@
       (assoc :bucks-trade-amount 0)
       ;(doto (print :trade-requests))
        )))
+
+(re-frame/reg-event-db
+  :select-tradee-click
+  (fn [db [_ outgoing-trade-index]]
+    (-> db
+      (assoc :is-select-tradee-modal-open true)
+      (assoc :select-tradee-modal-index outgoing-trade-index))))
+
+(re-frame/reg-event-db
+  :cancel-button-click
+  (fn [db _]
+    (assoc db :is-select-tradee-modal-open false)))
+
+(re-frame/reg-event-db
+  :modal-trade-button-click
+  (fn [db [_ outgoing-trade-index tradee]]
+    (-> db
+        (assoc-in [:outgoing-trades outgoing-trade-index :tradee] (:name tradee))
+        (assoc :is-select-tradee-modal-open false))))
+

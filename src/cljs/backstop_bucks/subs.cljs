@@ -43,6 +43,11 @@
     (:pending-trades db)))
 
 (re-frame/reg-sub
+  ::outgoing-trades
+  (fn [db]
+    (:outgoing-trades db)))
+
+(re-frame/reg-sub
   ::page-view
   (fn [db]
       (:page db)))
@@ -51,6 +56,16 @@
   ::selected-trade-target-primary
   (fn [db]
     (:selected-trade-target db)))
+
+(re-frame/reg-sub
+  ::is-select-tradee-modal-open
+  (fn [db]
+    (:is-select-tradee-modal-open db)))
+
+(re-frame/reg-sub
+  ::select-tradee-modal-index
+  (fn [db]
+    (:select-tradee-modal-index db)))
 ;; --------------------------------------------------------
 
 (re-frame/reg-sub
@@ -73,6 +88,14 @@
 
   (fn [pending-trades]
     (count pending-trades)))
+
+(re-frame/reg-sub
+  ::outgoing-trades-count
+  :<- [::outgoing-trades]
+
+  (fn [outgoing-trades]
+    (count outgoing-trades)))
+
 
 (re-frame/reg-sub
   ::selected-trade-target

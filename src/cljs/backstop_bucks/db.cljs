@@ -11,7 +11,12 @@
                         {:reward-name "Beer" :price 8}
                         {:reward-name "Gift Card" :price 20}]
    :users [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
+   ;bucks
    :trade-requests []
    :selected-trade-target nil
+   ;non-bucks
    :pending-trades [{:reward-name "Pen" :price 40 :trader "Link"}]
+   :outgoing-trades [{:reward-name "Book" :price 28}]
+   :is-select-tradee-modal-open false
+   :select-tradee-modal-index 0
    })

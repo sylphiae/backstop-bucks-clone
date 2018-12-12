@@ -4,12 +4,12 @@
             [re-frame.core :as re-frame]
             [reagent.core :as reagent :refer [atom with-let]]))
 
-(defn trade-target []
+(defn trade-target [props]
   (reagent/with-let [trade-targets (re-frame/subscribe [::subs/trade-targets])
                      user-name (re-frame/subscribe [::subs/name])
                      selected-trade-target (re-frame/subscribe [::subs/selected-trade-target])]
     [:div
-     "Who would you like to trade with?"
+     (str "Who would you like to trade \"" (:trade-category props) "\" with?")
      [b/Input {:type "select"
                :value @selected-trade-target
                :on-change #(re-frame/dispatch [:select-trade-target (-> % .-target .-value)])}
