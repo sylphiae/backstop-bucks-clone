@@ -1,13 +1,17 @@
 (ns backstop-bucks.views.view
   (:require [backstop-bucks.subs :as subs]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as re-frame]
+            [backstop-bucks.components.navbar :refer [navbar]]))
 
 ;header
 
 ;subscription to the current page
 (defn view-panel []
       (let [page-view (re-frame/subscribe [::subs/page-view])]
-           [:div (@page-view)]))
+           [:div
+            [navbar {:color "primary" :dark true}]
+            (print page-view)
+            (@page-view)]))
 
 (comment "Add nav bar
 Add page for viewing historical trades?")

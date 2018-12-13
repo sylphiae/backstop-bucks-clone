@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [backstop-bucks.db :as db]
     [backstop-bucks.views.user-trade :refer [user-trade]]
+    [backstop-bucks.views.user-home-page :refer [user-home-page]]
     [backstop-bucks.util :as util]))
 
 (re-frame/reg-event-db
@@ -17,6 +18,16 @@
       (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:unredeemed-rewards db) unredeemed-reward-index))
       (update-in [:unredeemed-rewards] util/remove-index unredeemed-reward-index)
       (assoc :page user-trade))))
+
+(re-frame/reg-event-db
+  :trade-nav-click
+  (fn [db _]
+    (assoc db :page user-trade)))
+
+(re-frame/reg-event-db
+  :home-nav-click
+  (fn [db _]
+    (assoc db :page user-home-page)))
 
 (re-frame/reg-event-db
   :redeem-button-click

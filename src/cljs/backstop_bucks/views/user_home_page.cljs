@@ -5,16 +5,12 @@
     [backstop-bucks.subs :as subs]
     [baking-soda.core :as b]
     [backstop-bucks.components.action-button :refer [action-button]]
-    [backstop-bucks.components.basic-table :refer [basic-table]]))
-
-(defn unredeemed-rewards []
-  (reagent/with-let [unredeemed-rewards (re-frame/subscribe [::subs/unredeemed-rewards])
-                     unredeemed-lis (mapv #(conj [:li] %) @unredeemed-rewards)]
-    [:div (into [:ol] unredeemed-lis)]))
+    [backstop-bucks.components.basic-table :refer [basic-table]]
+   ))
 
 ; react router - secretary
 
-(defn main-panel []
+(defn user-home-page []
   (let [first-name (re-frame/subscribe [::subs/name])
         bucks (re-frame/subscribe [::subs/bucks])
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
@@ -28,9 +24,9 @@
      [basic-table {:subscription-details [::subs/unredeemed-rewards]
                    :column-names ["#" "Reward Name" "Reward Value"]
                    :column-keys [:reward-name :price]}
-      [action-button {:event :redeem-button-click} "Redeem"]
-      [action-button {:value [:unredeemed-rewards] :event :reject-button-click} "Reject"]
-      [action-button {:event :trade-button-click} "Trade"]]
+      [action-button {:event :redeem-button-click :color "primary"} "Redeem"]
+      [action-button {:value [:unredeemed-rewards] :event :reject-button-click :color "danger"} "Reject"]
+      [action-button {:event :trade-button-click :color "primary"} "Trade"]]
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [basic-table {:subscription-details [::subs/redeemed-rewards]
                    :column-names ["#" "Reward Name" "Reward Value"]

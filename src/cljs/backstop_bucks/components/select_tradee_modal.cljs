@@ -17,6 +17,8 @@
      [trade-target {:trade-category (:reward-name (nth @outgoing-trades @select-tradee-modal-index))}]
      ]
     [b/ModalFooter
-     [action-button {:value [@select-tradee-modal-index @selected-trade-target] :event :modal-trade-button-click} "Request Trade"]
+     [action-button {:value [@select-tradee-modal-index @selected-trade-target]
+                     :event :modal-trade-button-click
+                     :color "primary"} "Request Trade"]
      [action-button {:event :cancel-button-click :color "secondary"} "Cancel"]
      ]]]))

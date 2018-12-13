@@ -20,19 +20,21 @@
        [:h2 "Trade Amount:"]
        [bucks-input]
        [trade-target {:trade-category "Backstop Bucks"}]
-       [action-button {:value [@bucks-trade-request @selected-trade-target] :event :trade-request-click} "Request Backstop Bucks trade"]
+       [action-button {:value [@bucks-trade-request @selected-trade-target]
+                       :event :trade-request-click
+                       :color "primary"} "Request Backstop Bucks trade"]
        [:h4 "Pending Trades Tables:"]
        [:h5 "Incoming Trades: " @pending-trades-count]
        [basic-table {:subscription-details [::subs/pending-trades]
                      :column-names ["#" "Reward Name" "Reward Value" "Trader"]
                      :column-keys [:reward-name :price :trader]}
-        [action-button {:event :accept-button-click} "Accept"]
-        [action-button {:value [:pending-trades] :event :reject-button-click} "Reject"]]
+        [action-button {:event :accept-button-click :color "primary"} "Accept"]
+        [action-button {:value [:pending-trades] :event :reject-button-click :color "danger"} "Reject"]]
        [:h5 "Outgoing Trades: " @outgoing-trades-count]
        [basic-table {:subscription-details [::subs/outgoing-trades]
                      :column-names ["#" "Reward Name" "Reward Value" "Tradee"]
                      :column-keys [:reward-name :price :tradee]}
-        [action-button {:event :select-tradee-click} "Select Tradee"]]
+        [action-button {:event :select-tradee-click :color "primary"} "Select Tradee"]]
        [select-tradee-modal {:is-open @is-modal-open}]
        ]))
 

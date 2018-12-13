@@ -1,22 +1,22 @@
 (ns backstop-bucks.db
-  (:require [backstop-bucks.views.user-home-page :as home-page]))
+  (:require [backstop-bucks.views.user-home-page :refer [user-home-page]]))
 
 (def default-db
-  {:page #'home-page/main-panel
-   :name "Jenny"
-   :bucks 100
-   :bucks-trade-amount 0
-   :redeemed-rewards [{:reward-name "Coupon" :price 10} {:reward-name "Candy" :price 2}]
-   :unredeemed-rewards [{:reward-name "Phone charger" :price 15}
-                        {:reward-name "Beer" :price 8}
-                        {:reward-name "Gift Card" :price 20}]
-   :users [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
+  {:page                        user-home-page
+   :name                        "Jenny"
+   :bucks                       100
+   :bucks-trade-amount          0
+   :redeemed-rewards            [{:reward-name "Coupon" :price 10} {:reward-name "Candy" :price 2}]
+   :unredeemed-rewards          [{:reward-name "Phone charger" :price 15}
+                                 {:reward-name "Beer" :price 8}
+                                 {:reward-name "Gift Card" :price 20}]
+   :users                       [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
    ;bucks
-   :trade-requests []
-   :selected-trade-target nil
+   :trade-requests              []
+   :selected-trade-target       nil
    ;non-bucks
-   :pending-trades [{:reward-name "Pen" :price 40 :trader "Link"}]
-   :outgoing-trades [{:reward-name "Book" :price 28}]
+   :pending-trades              [{:reward-name "Pen" :price 40 :trader "Link"}]
+   :outgoing-trades             [{:reward-name "Book" :price 28}]
    :is-select-tradee-modal-open false
-   :select-tradee-modal-index 0
+   :select-tradee-modal-index   0
    })
