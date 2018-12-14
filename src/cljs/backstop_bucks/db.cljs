@@ -19,4 +19,5 @@
    :outgoing-trades             [{:reward-name "Book" :price 28}]
    :is-select-tradee-modal-open false
    :select-tradee-modal-index   0
+   :is-bucks-alert-open         false
    })
