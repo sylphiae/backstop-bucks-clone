@@ -6,7 +6,8 @@
                 [backstop-bucks.components.action-button :refer [action-button]]
                 [backstop-bucks.components.select-tradee-modal :refer [select-tradee-modal]]
                 [reagent.core :as reagent :refer [atom with-let]]
-                [backstop-bucks.components.basic-table :refer [basic-table]]))
+                [backstop-bucks.components.basic-table :refer [basic-table]]
+                [baking-soda.core :as b]))
 
 (defn user-trade []
       (reagent/with-let [first-name (re-frame/subscribe [::subs/name])
@@ -14,8 +15,10 @@
                          bucks-trade-request (re-frame/subscribe [::subs/bucks-trade-amount])
                          pending-trades-count (re-frame/subscribe [::subs/pending-trades-count])
                          outgoing-trades-count (re-frame/subscribe [::subs/outgoing-trades-count])
-                         is-modal-open (re-frame/subscribe [::subs/is-select-tradee-modal-open])]
+                         is-modal-open (re-frame/subscribe [::subs/is-select-tradee-modal-open])
+                         is-alert-open (re-frame/subscribe [::subs/is-bucks-alert-open])]
       [:div
+       [b/Alert {:color "danger" :isOpen @is-alert-open} "You do not have enough Backstop Bucks for that trade."]
        [:h1 @first-name "'s Trade Page"]
        [:h2 "Trade Amount:"]
        [bucks-input]

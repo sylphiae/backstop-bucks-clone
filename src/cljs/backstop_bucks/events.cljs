@@ -32,9 +32,11 @@
 (re-frame/reg-event-db
   :redeem-button-click
   (fn [db [_ redeemed-reward-index]]
+    (let [new-bucks (- (:bucks db) (:price (nth (:unredeemed-rewards db) redeemed-reward-index)))]
       (-> db
+          (assoc :bucks new-bucks)
           (assoc-in [:redeemed-rewards (count (:redeemed-rewards db))] (nth (:unredeemed-rewards db) redeemed-reward-index))
-          (update-in [:unredeemed-rewards] util/remove-index redeemed-reward-index))))
+          (update-in [:unredeemed-rewards] util/remove-index redeemed-reward-index)))))
 
 (re-frame/reg-event-db
   :reject-button-click
@@ -62,11 +64,13 @@
 (re-frame/reg-event-db
   :trade-request-click
   (fn [db [_ trade-value trade-target]]
-    (-> db
-      (assoc-in [:trade-requests (count (:trade-requests db))] {:trade-value trade-value :trade-target trade-target})
-      (assoc :bucks-trade-amount 0)
-      ;(doto (print :trade-requests))
-       )))
+    (if (<= trade-value (:bucks db))
+      (-> db
+        (assoc :is-bucks-alert-open false)
+        (assoc-in [:trade-requests (count (:trade-requests db))] {:trade-value trade-value :trade-target trade-target})
+        (assoc :bucks-trade-amount 0)
+        (assoc :bucks (- (:bucks db) trade-value)))
+      (assoc db :is-bucks-alert-open true))))
 
 (re-frame/reg-event-db
   :select-tradee-click

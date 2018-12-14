@@ -10,7 +10,6 @@
       (let [page-view (re-frame/subscribe [::subs/page-view])]
            [:div
             [navbar {:color "primary" :dark true}]
-            (print page-view)
             (@page-view)]))
 
 (comment "Add nav bar

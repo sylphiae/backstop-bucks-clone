@@ -8,8 +8,6 @@
     [backstop-bucks.components.basic-table :refer [basic-table]]
    ))
 
-; react router - secretary
-
 (defn user-home-page []
   (let [first-name (re-frame/subscribe [::subs/name])
         bucks (re-frame/subscribe [::subs/bucks])

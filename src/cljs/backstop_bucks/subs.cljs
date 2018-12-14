@@ -63,6 +63,11 @@
     (:is-select-tradee-modal-open db)))
 
 (re-frame/reg-sub
+  ::is-bucks-alert-open
+  (fn [db]
+    (:is-bucks-alert-open db)))
+
+(re-frame/reg-sub
   ::select-tradee-modal-index
   (fn [db]
     (:select-tradee-modal-index db)))
