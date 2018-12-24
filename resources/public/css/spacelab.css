@@ -564,6 +564,8 @@ pre code {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 @media (min-width: 576px) {
@@ -606,6 +608,12 @@ pre code {
       flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  background-color: #eee;
+  border: 3px solid #eee;
+  border-radius: 0.3rem;
+  padding-bottom: 5px;
 }
 
 .no-gutters {
@@ -639,6 +647,7 @@ pre code {
       -ms-flex-positive: 1;
           flex-grow: 1;
   max-width: 100%;
+  padding: 4px;
 }
 
 .col-auto {

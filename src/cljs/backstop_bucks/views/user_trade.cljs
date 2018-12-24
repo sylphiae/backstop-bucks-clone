@@ -19,13 +19,17 @@
                          is-alert-open (re-frame/subscribe [::subs/is-bucks-alert-open])]
       [:div
        [b/Alert {:color "danger" :isOpen @is-alert-open} "You do not have enough Backstop Bucks for that trade."]
-       [:h1 @first-name "'s Trade Page"]
+       [b/Container
+        [:h1 {:class "text-primary"} @first-name "'s Trade Page"]
+       [b/Row
+        [b/Col {:lg "12"}
        [:h2 "Trade Amount:"]
-       [bucks-input]
+       [b/Col [bucks-input]]
        [trade-target {:trade-category "Backstop Bucks"}]
+         [b/Col
        [action-button {:value [@bucks-trade-request @selected-trade-target]
                        :event :trade-request-click
-                       :color "primary"} "Request Backstop Bucks trade"]
+                       :color "primary"} "Request Backstop Bucks trade"]]]]
        [:h4 "Pending Trades Tables:"]
        [:h5 "Incoming Trades: " @pending-trades-count]
        [basic-table {:subscription-details [::subs/pending-trades]
@@ -38,8 +42,7 @@
                      :column-names ["#" "Reward Name" "Reward Value" "Tradee"]
                      :column-keys [:reward-name :price :tradee]}
         [action-button {:event :select-tradee-click :color "primary"} "Select Tradee"]]
-       [select-tradee-modal {:is-open @is-modal-open}]
-       ]))
+       [select-tradee-modal {:is-open @is-modal-open}]]]))
 
 (comment "Input the amount user would like to trade
 Select trade target

@@ -14,8 +14,11 @@
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
         unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])]
     [:div
-     [:h1
-      @first-name "'s Backstop Bucks Home Page"]
+     [b/Container
+      [b/Row
+       [b/Col
+     [:h1 {:class "text-primary"}
+      @first-name "'s Backstop Bucks Home Page"]]]
      [:h3
       "Backstop Bucks: $" @bucks]
      [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
@@ -28,7 +31,7 @@
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [basic-table {:subscription-details [::subs/redeemed-rewards]
                    :column-names ["#" "Reward Name" "Reward Value"]
-                   :column-keys [:reward-name :price]}]]))
+                   :column-keys [:reward-name :price]}]]]))
 
 (comment "Actions user can take while on this page:
 Click on Redeem rewards
