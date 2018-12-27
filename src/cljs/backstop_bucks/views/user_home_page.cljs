@@ -38,7 +38,5 @@
 Click on Redeem rewards
 Click on Reject rewards
 Click on trade rewards button to go to the trade page where you can click on trade Backstop Bucks button
-"
-"Non-actions:
-See future eligible rewards
+Click to see future eligible rewards
 ")

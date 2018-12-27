@@ -111,8 +111,29 @@
   ::tier
   :<- [::bucks]
   :<- [::tiers]
-  (fn [[bucks tiers tier] _]
+  (fn [[bucks tiers] _]
     (some #(when (= (second (second % )) (util/get-tier-end-value bucks tiers)) %) tiers)))
+
+(re-frame/reg-sub
+  ::next-tier
+  :<- [::tier]
+  :<- [::tiers]
+  (fn [[tier tiers] _]
+    (let [next-tier (inc (js/parseInt (name (first tier))))]
+      (first (hash-map next-tier (get tiers (keyword (str next-tier))))))))
+
+(re-frame/reg-sub
+  ::upcoming-rewards
+  :<- [::unredeemed-rewards]
+  :<- [::next-tier]
+  (fn [[unredeemed-rewards next-tier] _]
+    (filter #(< (first (second next-tier)) (:price %) (second (second next-tier))) unredeemed-rewards)))
+
+(re-frame/reg-sub
+  ::upcoming-rewards-count
+  :<- [::upcoming-rewards]
+  (fn [upcoming-rewards]
+    (count upcoming-rewards)))
 
 (re-frame/reg-sub
   ::selected-trade-target
