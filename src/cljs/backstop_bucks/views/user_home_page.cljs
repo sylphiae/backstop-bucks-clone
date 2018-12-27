@@ -19,8 +19,9 @@
        [b/Col
      [:h1 {:class "text-primary"}
       @first-name "'s Backstop Bucks Home Page"]]]
-     [:h3
+     [:h3 {:class "text-info"}
       "Backstop Bucks: $" @bucks]
+      [action-button {:event :upcoming-rewards-click :color "info"} "Your Upcoming Rewards..."]
      [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
      [basic-table {:subscription-details [::subs/unredeemed-rewards]
                    :column-names ["#" "Reward Name" "Reward Value"]
@@ -37,4 +38,7 @@
 Click on Redeem rewards
 Click on Reject rewards
 Click on trade rewards button to go to the trade page where you can click on trade Backstop Bucks button
-" )
+"
+"Non-actions:
+See future eligible rewards
+")

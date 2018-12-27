@@ -1,6 +1,7 @@
 (ns backstop-bucks.subs
   (:require
-   [re-frame.core :as re-frame]))
+   [re-frame.core :as re-frame]
+   [backstop-bucks.util :as util]))
 
 (re-frame/reg-sub
  ::name
@@ -11,6 +12,11 @@
  ::bucks
  (fn [db]
    (:bucks db)))
+
+(re-frame/reg-sub
+  ::tiers
+  (fn [db]
+    (:tiers db)))
 
 (re-frame/reg-sub
   ::bucks-trade-amount
@@ -101,6 +107,12 @@
   (fn [outgoing-trades]
     (count outgoing-trades)))
 
+(re-frame/reg-sub
+  ::tier
+  :<- [::bucks]
+  :<- [::tiers]
+  (fn [[bucks tiers tier] _]
+    (some #(when (= (second (second % )) (util/get-tier-end-value bucks tiers)) %) tiers)))
 
 (re-frame/reg-sub
   ::selected-trade-target

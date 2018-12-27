@@ -4,6 +4,7 @@
     [backstop-bucks.db :as db]
     [backstop-bucks.views.user-trade :refer [user-trade]]
     [backstop-bucks.views.user-home-page :refer [user-home-page]]
+    [backstop-bucks.views.upcoming-rewards-page :refer [upcoming-rewards-page]]
     [backstop-bucks.util :as util]))
 
 (re-frame/reg-event-db
@@ -28,6 +29,11 @@
   :home-nav-click
   (fn [db _]
     (assoc db :page user-home-page)))
+
+(re-frame/reg-event-db
+  :upcoming-rewards-click
+  (fn [db _]
+    (assoc db :page upcoming-rewards-page)))
 
 (re-frame/reg-event-db
   :redeem-button-click

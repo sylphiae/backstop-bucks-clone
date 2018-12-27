@@ -8,7 +8,9 @@
   [:<>
    [b/Navbar props
     [b/NavbarBrand {:href "#" :on-click #(re-frame/dispatch [:home-nav-click])} "Backstop Bucks"]
-     [action-button {:event :trade-nav-click :color "primary"} "Trade Page"]
+     [b/ButtonGroup
+      [action-button {:event :trade-nav-click :color "primary"} "Trade Page"]
+      [action-button {:event :upcoming-rewards-click :color "primary"} "Future Rewards"]]
      ;[b/NavLink {:href "#" :on-click #(re-frame/dispatch [:trade-nav-click])} "Trade Page"]
     ]
    ]
