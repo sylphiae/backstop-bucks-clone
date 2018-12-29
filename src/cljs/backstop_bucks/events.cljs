@@ -16,8 +16,8 @@
   :trade-button-click
   (fn [db [_ unredeemed-reward-index]]
     (-> db
-      (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:unredeemed-rewards db) unredeemed-reward-index))
-      (update-in [:unredeemed-rewards] util/remove-index unredeemed-reward-index)
+      (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:all-rewards db) unredeemed-reward-index))
+      (update-in [:all-rewards] util/remove-index unredeemed-reward-index)
       (assoc :page user-trade))))
 
 (re-frame/reg-event-db
@@ -38,16 +38,21 @@
 (re-frame/reg-event-db
   :redeem-button-click
   (fn [db [_ redeemed-reward-index]]
-    (let [new-bucks (- (:bucks db) (:price (nth (:unredeemed-rewards db) redeemed-reward-index)))]
+    (let [new-bucks (- (:bucks db) (:price (nth (:all-rewards db) redeemed-reward-index)))]
       (-> db
           (assoc :bucks new-bucks)
-          (assoc-in [:redeemed-rewards (count (:redeemed-rewards db))] (nth (:unredeemed-rewards db) redeemed-reward-index))
-          (update-in [:unredeemed-rewards] util/remove-index redeemed-reward-index)))))
+          (assoc-in [:pending-rewards (count (:pending-rewards db))] (nth (:all-rewards db) redeemed-reward-index))
+          (update-in [:all-rewards] util/remove-index redeemed-reward-index)))))
 
 (re-frame/reg-event-db
   :reject-button-click
   (fn [db [_ rejected-reward-index collection]]
       (update-in db collection util/remove-index rejected-reward-index)))
+
+(re-frame/reg-event-db
+  :confirm-button-click
+  (fn [db [_ rejected-reward-index collection]]
+    (update-in db collection util/remove-index rejected-reward-index)))
 
 ;this event handler is going to do more when there is an actual database and other users to interact with
 (re-frame/reg-event-db
@@ -64,8 +69,7 @@
 (re-frame/reg-event-db
   :select-trade-target
   (fn [db [_ trade-target-value]]
-    (assoc db :selected-trade-target {:name trade-target-value}))
-  )
+    (assoc db :selected-trade-target {:name trade-target-value})))
 
 (re-frame/reg-event-db
   :trade-request-click

@@ -12,7 +12,9 @@
   (let [first-name (re-frame/subscribe [::subs/name])
         bucks (re-frame/subscribe [::subs/bucks])
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
-        unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])]
+        unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])
+        pending-rewards-count (re-frame/subscribe [::subs/pending-rewards-count])
+        all-rewards (re-frame/subscribe [::subs/all-rewards])]
     [:div
      [b/Container
       [b/Row
@@ -27,8 +29,12 @@
                    :column-names ["#" "Reward Name" "Reward Value"]
                    :column-keys [:reward-name :price]}
       [action-button {:event :redeem-button-click :color "primary"} "Redeem"]
-      [action-button {:value [:unredeemed-rewards] :event :reject-button-click :color "danger"} "Reject"]
+      [action-button {:value [:all-rewards] :event :reject-button-click :color "danger"} "Reject"]
       [action-button {:event :trade-button-click :color "primary"} "Trade"]]
+     [:h4 "Pending Rewards: " @pending-rewards-count]
+      [basic-table {:subscription-details [::subs/pending-rewards]
+                    :column-names ["#" "Reward Name" "Reward Value"]
+                    :column-keys [:reward-name :price]}]
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [basic-table {:subscription-details [::subs/redeemed-rewards]
                    :column-names ["#" "Reward Name" "Reward Value"]

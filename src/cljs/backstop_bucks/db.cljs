@@ -3,12 +3,13 @@
             [backstop-bucks.views.admin-home-page :refer [admin-home-page]]))
 
 (def default-db
-  {:page                        user-home-page
+  {:page                       admin-home-page
    :name                        "Jenny"
    :bucks                       100
    :bucks-trade-amount          0
    :redeemed-rewards            [{:reward-name "Coupon" :price 10} {:reward-name "Candy" :price 2}]
-   :unredeemed-rewards          [{:reward-name "Phone charger" :price 15}
+   :pending-rewards             []
+   :all-rewards                 [{:reward-name "Phone charger" :price 15}
                                  {:reward-name "Beer" :price 8}
                                  {:reward-name "Gift Card" :price 20}
                                  {:reward-name "Switch" :price 300}]

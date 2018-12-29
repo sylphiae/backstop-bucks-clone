@@ -29,9 +29,14 @@
    (:redeemed-rewards db)))
 
 (re-frame/reg-sub
- ::unredeemed-rewards
- (fn [db]
-   (:unredeemed-rewards db)))
+  ::pending-rewards
+  (fn [db]
+    (:pending-rewards db)))
+
+(re-frame/reg-sub
+  ::all-rewards
+  (fn [db]
+   (:all-rewards db)))
 
 (re-frame/reg-sub
   ::trade-targets
@@ -81,7 +86,7 @@
 
 (re-frame/reg-sub
  ::unredeemed-rewards-count
- :<- [::unredeemed-rewards]
+ :<- [::all-rewards]
 
  (fn [unredeemed-rewards]
    (count unredeemed-rewards)))
@@ -124,7 +129,7 @@
 
 (re-frame/reg-sub
   ::upcoming-rewards
-  :<- [::unredeemed-rewards]
+  :<- [::all-rewards]
   :<- [::next-tier]
   (fn [[unredeemed-rewards next-tier] _]
     (filter #(< (first (second next-tier)) (:price %) (second (second next-tier))) unredeemed-rewards)))
@@ -134,6 +139,19 @@
   :<- [::upcoming-rewards]
   (fn [upcoming-rewards]
     (count upcoming-rewards)))
+
+(re-frame/reg-sub
+  ::pending-rewards-count
+  :<- [::pending-rewards]
+  (fn [pending-rewards]
+    (count pending-rewards)))
+
+(re-frame/reg-sub
+  ::unredeemed-rewards
+  :<- [::all-rewards]
+  :<- [::bucks]
+  (fn [[all-rewards bucks] _]
+    (filter #(< (:price %) bucks) all-rewards)))
 
 (re-frame/reg-sub
   ::selected-trade-target
