@@ -7,9 +7,8 @@
 (defn- item->table-row [actions item-keys index item]
   [:tr
    [:td (inc index)]
-   ;(print "what does this print?")
    (map #(conj [:td] (% item)) item-keys)
-   [:td (map #(util/clone-component % {:value (conj [index] (:value (second %)))}) actions)]])
+   [:td (map #(util/clone-component % {:value (conj [(:reward-id item)] (:value (second %)))}) actions)]])
 
 (defn basic-table [props & children]
   (reagent/with-let [table-items (re-frame/subscribe (:subscription-details props))]

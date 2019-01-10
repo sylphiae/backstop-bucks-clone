@@ -14,10 +14,10 @@
 
 (re-frame/reg-event-db
   :trade-button-click
-  (fn [db [_ unredeemed-reward-index]]
+  (fn [db [_ redeemed-reward-index]]
     (-> db
-      (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:all-rewards db) unredeemed-reward-index))
-      (update-in [:all-rewards] util/remove-index unredeemed-reward-index)
+      (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:redeemed-rewards db) redeemed-reward-index))
+      (update-in [:redeemed-rewards] util/remove-index redeemed-reward-index)
       (assoc :page user-trade))))
 
 (re-frame/reg-event-db
@@ -37,17 +37,32 @@
 
 (re-frame/reg-event-db
   :redeem-button-click
-  (fn [db [_ redeemed-reward-index]]
-    (let [new-bucks (- (:bucks db) (:price (nth (:all-rewards db) redeemed-reward-index)))]
+  (fn [db [_ redeemed-reward-id]]
+    (let [reward (some #(when (= (:reward-id %) redeemed-reward-id) %) (:all-rewards db))
+          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))
+          new-bucks (- (:bucks db) (:price reward redeemed-reward-id))]
       (-> db
           (assoc :bucks new-bucks)
-          (assoc-in [:pending-rewards (count (:pending-rewards db))] (nth (:all-rewards db) redeemed-reward-index))
-          (update-in [:all-rewards] util/remove-index redeemed-reward-index)))))
+          (assoc-in [:all-rewards all-rewards-index :reward-state ] :pending)
+          ;(assoc-in [:pending-rewards (count (:pending-rewards db))] (nth (:unredeemed-rewards db) redeemed-reward-index))
+          ;(update-in [:unredeemed-rewards] util/remove-index redeemed-reward-index)
+          ))))
 
 (re-frame/reg-event-db
   :reject-button-click
   (fn [db [_ rejected-reward-index collection]]
       (update-in db collection util/remove-index rejected-reward-index)))
+
+(re-frame/reg-event-db
+  :remove-button-click
+  (fn [db [_ rejected-reward-index]]
+    (let [reward  (some #(when (= (:key %) rejected-reward-index) %) (:all-rewards db))
+          pending-rewards-index (first (util/positions #{reward} (:pending-rewards db)))
+          unredeemed-rewards-index (first (util/positions #{reward} (:unredeemed-rewards db)))]
+      (-> db
+          (update-in (:pending-rewards db) util/remove-index pending-rewards-index)
+          (update-in (:unredeemed-rewards db) util/remove-index unredeemed-rewards-index)
+          (update-in (:all-rewards db) util/remove-index rejected-reward-index)))))
 
 (re-frame/reg-event-db
   :confirm-button-click

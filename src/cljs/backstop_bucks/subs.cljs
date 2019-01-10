@@ -24,16 +24,6 @@
       (:bucks-trade-amount db)))
 
 (re-frame/reg-sub
- ::redeemed-rewards
- (fn [db]
-   (:redeemed-rewards db)))
-
-(re-frame/reg-sub
-  ::pending-rewards
-  (fn [db]
-    (:pending-rewards db)))
-
-(re-frame/reg-sub
   ::all-rewards
   (fn [db]
    (:all-rewards db)))
@@ -85,11 +75,22 @@
 ;; --------------------------------------------------------
 
 (re-frame/reg-sub
- ::unredeemed-rewards-count
- :<- [::all-rewards]
+  ::redeemed-rewards
+  :<- [::all-rewards]
+  (fn [all-rewards]
+    (filter #(= :redeemed (:reward-state %)) all-rewards)))
 
- (fn [unredeemed-rewards]
-   (count unredeemed-rewards)))
+(re-frame/reg-sub
+  ::pending-rewards
+  :<- [::all-rewards]
+  (fn [all-rewards]
+    (filter #(= :pending (:reward-state %)) all-rewards)))
+
+(re-frame/reg-sub
+  ::unredeemed-rewards
+  :<- [::all-rewards]
+  (fn [all-rewards]
+    (filter #(= :unredeemed (:reward-state %)) all-rewards)))
 
 (re-frame/reg-sub
  ::redeemed-rewards-count
@@ -147,11 +148,18 @@
     (count pending-rewards)))
 
 (re-frame/reg-sub
-  ::unredeemed-rewards
-  :<- [::all-rewards]
+  ::unredeemed-rewards-affordable
+  :<- [::unredeemed-rewards]
   :<- [::bucks]
-  (fn [[all-rewards bucks] _]
-    (filter #(< (:price %) bucks) all-rewards)))
+  (fn [[unredeemed-rewards bucks] _]
+    (filter #(< (:price %) bucks) unredeemed-rewards)))
+
+(re-frame/reg-sub
+  ::unredeemed-rewards-count
+  :<- [::unredeemed-rewards-affordable]
+
+  (fn [unredeemed-rewards-affordable]
+    (count unredeemed-rewards-affordable)))
 
 (re-frame/reg-sub
   ::selected-trade-target

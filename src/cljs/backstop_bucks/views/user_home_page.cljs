@@ -25,12 +25,11 @@
       "Backstop Bucks: $" @bucks]
       [action-button {:event :upcoming-rewards-click :color "info"} "Your Upcoming Rewards..."]
      [:h4 "Unredeemed Rewards: " @unredeemed-rewards-count]
-     [basic-table {:subscription-details [::subs/unredeemed-rewards]
-                   :column-names ["#" "Reward Name" "Reward Value"]
-                   :column-keys [:reward-name :price]}
+     [basic-table {:subscription-details [::subs/unredeemed-rewards-affordable]
+                   :column-names         ["#" "Reward Name" "Reward Value"]
+                   :column-keys          [:reward-name :price]}
       [action-button {:event :redeem-button-click :color "primary"} "Redeem"]
-      [action-button {:value [:all-rewards] :event :reject-button-click :color "danger"} "Reject"]
-      [action-button {:event :trade-button-click :color "primary"} "Trade"]]
+      [action-button {:value [:unredeemed-rewards] :event :reject-button-click :color "danger"} "Reject"]]
      [:h4 "Pending Rewards: " @pending-rewards-count]
       [basic-table {:subscription-details [::subs/pending-rewards]
                     :column-names ["#" "Reward Name" "Reward Value"]
@@ -38,7 +37,8 @@
      [:h4 "Redeemed Rewards: " @redeemed-rewards-count]
      [basic-table {:subscription-details [::subs/redeemed-rewards]
                    :column-names ["#" "Reward Name" "Reward Value"]
-                   :column-keys [:reward-name :price]}]]]))
+                   :column-keys [:reward-name :price]}
+      [action-button {:event :trade-button-click :color "primary"} "Trade"]]]]))
 
 (comment "Actions user can take while on this page:
 Click on Redeem rewards
