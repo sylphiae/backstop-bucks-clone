@@ -13,6 +13,10 @@
   (vec (concat (subvec coll 0 pos) (subvec coll (inc pos)))))
 ;dissoc-in for vectors
 
+(defn remove-item [coll id]
+  (remove #(= id (:reward-id %)) coll))
+;dissoc-in for maps
+
 (defn get-tier-end-value [bucks coll]
   (some #(when (> % bucks) %) (map second (vals coll))))
 

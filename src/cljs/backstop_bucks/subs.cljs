@@ -39,16 +39,6 @@
     (:trade-requests db)))
 
 (re-frame/reg-sub
-  ::pending-trades
-  (fn [db]
-    (:pending-trades db)))
-
-(re-frame/reg-sub
-  ::outgoing-trades
-  (fn [db]
-    (:outgoing-trades db)))
-
-(re-frame/reg-sub
   ::page-view
   (fn [db]
       (:page db)))
@@ -69,10 +59,16 @@
     (:is-bucks-alert-open db)))
 
 (re-frame/reg-sub
-  ::select-tradee-modal-index
+  ::select-tradee-modal-id
   (fn [db]
-    (:select-tradee-modal-index db)))
+    (:select-tradee-modal-id db)))
 ;; --------------------------------------------------------
+
+(re-frame/reg-sub
+  ::admin-rewards
+  :<- [::all-rewards]
+  (fn [all-rewards]
+    (remove (some-fn #(= :redeemed (:reward-state %)) #(= :pending-trade (:reward-state %)) #(= :outgoing-trade (:reward-state %))) all-rewards)))
 
 (re-frame/reg-sub
   ::redeemed-rewards
@@ -98,6 +94,18 @@
 
  (fn [redeemed-rewards]
    (count redeemed-rewards)))
+
+(re-frame/reg-sub
+  ::pending-trades
+  :<- [::all-rewards]
+  (fn [all-rewards]
+    (filter #(= :pending-trade (:reward-state %)) all-rewards)))
+
+(re-frame/reg-sub
+  ::outgoing-trades
+  :<- [::all-rewards]
+  (fn [all-rewards]
+    (filter #(= :outgoing-trade (:reward-state %)) all-rewards)))
 
 (re-frame/reg-sub
   ::pending-trades-count

@@ -14,11 +14,12 @@
 
 (re-frame/reg-event-db
   :trade-button-click
-  (fn [db [_ redeemed-reward-index]]
-    (-> db
-      (assoc-in [:outgoing-trades (count (:outgoing-trades db))] (nth (:redeemed-rewards db) redeemed-reward-index))
-      (update-in [:redeemed-rewards] util/remove-index redeemed-reward-index)
-      (assoc :page user-trade))))
+  (fn [db [_ redeemed-reward-id]]
+    (let [reward (some #(when (= (:reward-id %) redeemed-reward-id) %) (:all-rewards db))
+          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
+      (-> db
+        (assoc-in [:all-rewards all-rewards-index :reward-state ] :outgoing-trade)
+        (assoc :page user-trade)))))
 
 (re-frame/reg-event-db
   :trade-nav-click
@@ -43,26 +44,21 @@
           new-bucks (- (:bucks db) (:price reward redeemed-reward-id))]
       (-> db
           (assoc :bucks new-bucks)
-          (assoc-in [:all-rewards all-rewards-index :reward-state ] :pending)
-          ;(assoc-in [:pending-rewards (count (:pending-rewards db))] (nth (:unredeemed-rewards db) redeemed-reward-index))
-          ;(update-in [:unredeemed-rewards] util/remove-index redeemed-reward-index)
-          ))))
+          (assoc-in [:all-rewards all-rewards-index :reward-state ] :pending)))))
 
 (re-frame/reg-event-db
   :reject-button-click
-  (fn [db [_ rejected-reward-index collection]]
-      (update-in db collection util/remove-index rejected-reward-index)))
+  (fn [db [_ rejected-reward-id]]
+    (let [reward (some #(when (= (:reward-id %) rejected-reward-id) %) (:all-rewards db))
+          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
+      (assoc-in db [:all-rewards all-rewards-index :reward-state] :rejected))))
 
 (re-frame/reg-event-db
   :remove-button-click
-  (fn [db [_ rejected-reward-index]]
-    (let [reward  (some #(when (= (:key %) rejected-reward-index) %) (:all-rewards db))
-          pending-rewards-index (first (util/positions #{reward} (:pending-rewards db)))
-          unredeemed-rewards-index (first (util/positions #{reward} (:unredeemed-rewards db)))]
-      (-> db
-          (update-in (:pending-rewards db) util/remove-index pending-rewards-index)
-          (update-in (:unredeemed-rewards db) util/remove-index unredeemed-rewards-index)
-          (update-in (:all-rewards db) util/remove-index rejected-reward-index)))))
+  (fn [db [_ rejected-reward-id]]
+    (update-in db [:all-rewards] util/remove-item rejected-reward-id)
+    ;(remove #(= rejected-reward-id (:reward-id %)) (:all-rewards db))
+    ))
 
 (re-frame/reg-event-db
   :confirm-button-click
@@ -72,8 +68,10 @@
 ;this event handler is going to do more when there is an actual database and other users to interact with
 (re-frame/reg-event-db
   :accept-button-click
-  (fn [db [_ accepted-reward-index]]
-    (update-in db [:pending-trades] util/remove-index accepted-reward-index)))
+  (fn [db [_ accepted-reward-id]]
+    (let [reward  (some #(when (= (:reward-id %) accepted-reward-id) %) (:all-rewards db))
+          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
+      (assoc-in db [:all-rewards all-rewards-index :reward-state] :redeemed))))
 
 (re-frame/reg-event-db
   :bucks-input-change
@@ -99,10 +97,10 @@
 
 (re-frame/reg-event-db
   :select-tradee-click
-  (fn [db [_ outgoing-trade-index]]
+  (fn [db [_ outgoing-trade-id]]
     (-> db
-      (assoc :is-select-tradee-modal-open true)
-      (assoc :select-tradee-modal-index outgoing-trade-index))))
+        (assoc :is-select-tradee-modal-open true)
+        (assoc :select-tradee-modal-id outgoing-trade-id))))
 
 (re-frame/reg-event-db
   :cancel-button-click
@@ -111,8 +109,10 @@
 
 (re-frame/reg-event-db
   :modal-trade-button-click
-  (fn [db [_ outgoing-trade-index tradee]]
+  (fn [db [_ outgoing-trade-id tradee]]
+    (let [reward (some #(when (= (:reward-id %) outgoing-trade-id) %) (:all-rewards db))
+          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
     (-> db
-        (assoc-in [:outgoing-trades outgoing-trade-index :tradee] (:name tradee))
-        (assoc :is-select-tradee-modal-open false))))
+        (assoc-in [:all-rewards all-rewards-index :tradee] (:name tradee))
+        (assoc :is-select-tradee-modal-open false)))))
 

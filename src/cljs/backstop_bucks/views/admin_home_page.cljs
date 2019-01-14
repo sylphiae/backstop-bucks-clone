@@ -10,7 +10,7 @@
   [:div
    [b/Container
     [:h1 {:class "text-primary"} "Admin Page"]
-    [basic-table {:subscription-details [::subs/all-rewards]
+    [basic-table {:subscription-details [::subs/admin-rewards]
                   :column-names ["#" "Reward Name" "Reward Value"]
                   :column-keys [:reward-name :price]}
      [action-button {:event :remove-button-click :color "danger"} "Remove"]
