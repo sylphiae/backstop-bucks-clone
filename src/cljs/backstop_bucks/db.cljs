@@ -7,7 +7,8 @@
    :name                        "Jenny"
    :bucks                       100
    :bucks-trade-amount          0
-   :all-rewards                 [{:reward-name "Phone charger" :price 15 :reward-id 0 :reward-state :unredeemed}
+   :all-rewards                 [{:reward-name "Phone charger" :price 15 :reward-id 0 :reward-state :pending
+                                  :requesters [{:name "Jenny"} {:name "Marth"} {:name "Ike"}]}
                                  {:reward-name "Beer" :price 8 :reward-id 1 :reward-state :unredeemed}
                                  {:reward-name "Gift Card" :price 20 :reward-id 2 :reward-state :unredeemed}
                                  {:reward-name "Switch" :price 300 :reward-id 3 :reward-state :unredeemed}
@@ -20,8 +21,11 @@
    ;bucks
    :trade-requests              []
    :selected-trade-target       nil
+   :selected-grant-target       nil
    ;non-bucks
    :is-select-tradee-modal-open false
+   :is-grant-request-modal-open false
    :select-tradee-modal-id      0
+   :grant-request-modal-id      0
    :is-bucks-alert-open         false
    })

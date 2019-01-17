@@ -4,6 +4,7 @@
     [backstop-bucks.db :as db]
     [backstop-bucks.views.user-trade :refer [user-trade]]
     [backstop-bucks.views.user-home-page :refer [user-home-page]]
+    [backstop-bucks.views.admin-add-page :refer [admin-add-page]]
     [backstop-bucks.views.upcoming-rewards-page :refer [upcoming-rewards-page]]
     [backstop-bucks.util :as util]))
 
@@ -25,6 +26,11 @@
   :trade-nav-click
   (fn [db _]
     (assoc db :page user-trade)))
+
+(re-frame/reg-event-db
+  :add-admin-click
+  (fn [db _]
+    (assoc db :page admin-add-page)))
 
 (re-frame/reg-event-db
   :home-nav-click
@@ -59,11 +65,6 @@
     (update-in db [:all-rewards] util/remove-item rejected-reward-id)
     ;(remove #(= rejected-reward-id (:reward-id %)) (:all-rewards db))
     ))
-
-(re-frame/reg-event-db
-  :confirm-button-click
-  (fn [db [_ rejected-reward-index collection]]
-    (update-in db collection util/remove-index rejected-reward-index)))
 
 ;this event handler is going to do more when there is an actual database and other users to interact with
 (re-frame/reg-event-db
@@ -103,9 +104,21 @@
         (assoc :select-tradee-modal-id outgoing-trade-id))))
 
 (re-frame/reg-event-db
-  :cancel-button-click
+  :grant-button-click
+  (fn [db [_ requested-reward-id]]
+    (-> db
+        (assoc :is-grant-request-modal-open true)
+        (assoc :grant-request-modal-id requested-reward-id))))
+
+(re-frame/reg-event-db
+  :select-tradee-modal-cancel-button-click
   (fn [db _]
     (assoc db :is-select-tradee-modal-open false)))
+
+(re-frame/reg-event-db
+  :grant-request-modal-cancel-button-click
+  (fn [db _]
+    (assoc db :is-grant-request-modal-open false)))
 
 (re-frame/reg-event-db
   :modal-trade-button-click
@@ -115,4 +128,14 @@
     (-> db
         (assoc-in [:all-rewards all-rewards-index :tradee] (:name tradee))
         (assoc :is-select-tradee-modal-open false)))))
+
+(re-frame/reg-event-db
+  :grant-request-modal-button-click
+  (fn [db [_ grant-request-id grantee]]
+    (let [reward (some #(when (= (:reward-id %) grant-request-id) %) (:all-rewards db))
+          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
+      (-> db
+          (assoc-in [:all-rewards all-rewards-index :owner] (:name grantee))
+          (assoc-in [:all-rewards all-rewards-index :reward-state] :redeemed)
+          (assoc :is-grant-request-modal-open false)))))
 

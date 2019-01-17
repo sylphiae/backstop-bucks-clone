@@ -49,9 +49,19 @@
     (:selected-trade-target db)))
 
 (re-frame/reg-sub
+  ::selected-grant-target
+  (fn [db]
+    (:selected-grant-target db)))
+
+(re-frame/reg-sub
   ::is-select-tradee-modal-open
   (fn [db]
     (:is-select-tradee-modal-open db)))
+
+(re-frame/reg-sub
+  ::is-grant-request-modal-open
+  (fn [db]
+    (:is-grant-request-modal-open db)))
 
 (re-frame/reg-sub
   ::is-bucks-alert-open
@@ -62,6 +72,11 @@
   ::select-tradee-modal-id
   (fn [db]
     (:select-tradee-modal-id db)))
+
+(re-frame/reg-sub
+  ::grant-request-modal-id
+  (fn [db]
+    (:grant-request-modal-id db)))
 ;; --------------------------------------------------------
 
 (re-frame/reg-sub
@@ -69,6 +84,12 @@
   :<- [::all-rewards]
   (fn [all-rewards]
     (remove (some-fn #(= :redeemed (:reward-state %)) #(= :pending-trade (:reward-state %)) #(= :outgoing-trade (:reward-state %))) all-rewards)))
+
+(re-frame/reg-sub
+  ::unrequested-rewards
+  :<- [::admin-rewards]
+  (fn [admin-rewards]
+    (remove #(= :pending (:reward-state %)) admin-rewards)))
 
 (re-frame/reg-sub
   ::redeemed-rewards
@@ -163,6 +184,14 @@
     (filter #(< (:price %) bucks) unredeemed-rewards)))
 
 (re-frame/reg-sub
+  ::grant-request-item
+  :<- [::all-rewards]
+  :<- [::grant-request-modal-id]
+  (fn [[all-rewards grant-request-modal-id] _]
+    (:reward-name (some #(when (= (:reward-id %) grant-request-modal-id) %) all-rewards))))
+
+
+(re-frame/reg-sub
   ::unredeemed-rewards-count
   :<- [::unredeemed-rewards-affordable]
 
@@ -178,6 +207,14 @@
       (if (nil? selected-trade-target-primary)
         (first (remove #(= user-name (:name %)) trade-targets))
         selected-trade-target-primary)))
+
+(re-frame/reg-sub
+  ::grant-targets
+  :<- [::all-rewards]
+  :<- [::grant-request-modal-id]
+  (fn [[all-rewards grant-request-modal-id] _]
+    ;(print grant-request-modal-id)
+    (:requesters (some #(when (= grant-request-modal-id (:reward-id %)) %) all-rewards))))
 
 
 

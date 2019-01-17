@@ -9,10 +9,6 @@
       ; case button with no children and no props
       [(first coll) props])))
 
-(defn remove-index [coll pos]
-  (vec (concat (subvec coll 0 pos) (subvec coll (inc pos)))))
-;dissoc-in for vectors
-
 (defn remove-item [coll id]
   (remove #(= id (:reward-id %)) coll))
 ;dissoc-in for maps
