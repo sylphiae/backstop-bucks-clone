@@ -6,6 +6,7 @@
   {:page                        admin-home-page
    :name                        "Jenny"
    :bucks                       100
+   :new-bucks                   0
    :bucks-trade-amount          0
    :all-rewards                 [{:reward-name "Phone charger" :price 15 :reward-id 0 :reward-state :pending
                                   :requesters [{:name "Jenny"} {:name "Marth"} {:name "Ike"}]}
@@ -22,10 +23,12 @@
    :trade-requests              []
    :selected-trade-target       nil
    :selected-grant-target       nil
+   :selected-new-user           {:name "None"}
    ;non-bucks
    :is-select-tradee-modal-open false
    :is-grant-request-modal-open false
    :select-tradee-modal-id      0
    :grant-request-modal-id      0
    :is-bucks-alert-open         false
+   :is-add-admin-alert-open         false
    })

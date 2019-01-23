@@ -14,6 +14,16 @@
    (:bucks db)))
 
 (re-frame/reg-sub
+  ::new-bucks
+  (fn [db]
+    (:new-bucks db)))
+
+(re-frame/reg-sub
+  ::users
+  (fn [db]
+    (:users db)))
+
+(re-frame/reg-sub
   ::tiers
   (fn [db]
     (:tiers db)))
@@ -54,6 +64,11 @@
     (:selected-grant-target db)))
 
 (re-frame/reg-sub
+  ::selected-new-user
+  (fn [db]
+    (:selected-new-user db)))
+
+(re-frame/reg-sub
   ::is-select-tradee-modal-open
   (fn [db]
     (:is-select-tradee-modal-open db)))
@@ -67,6 +82,11 @@
   ::is-bucks-alert-open
   (fn [db]
     (:is-bucks-alert-open db)))
+
+(re-frame/reg-sub
+  ::is-add-admin-alert-open
+  (fn [db]
+    (:is-add-admin-alert-open db)))
 
 (re-frame/reg-sub
   ::select-tradee-modal-id

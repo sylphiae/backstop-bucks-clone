@@ -30,7 +30,9 @@
 (re-frame/reg-event-db
   :add-admin-click
   (fn [db _]
-    (assoc db :page admin-add-page)))
+    (-> db
+    (assoc :page admin-add-page)
+    (assoc :is-add-admin-alert-open false))))
 
 (re-frame/reg-event-db
   :home-nav-click
@@ -138,4 +140,22 @@
           (assoc-in [:all-rewards all-rewards-index :owner] (:name grantee))
           (assoc-in [:all-rewards all-rewards-index :reward-state] :redeemed)
           (assoc :is-grant-request-modal-open false)))))
+
+;this needs to do more when there is more than one user
+(re-frame/reg-event-db
+  :set-bucks-click
+  (fn [db [_ new-bucks selected-new-user]]
+    (-> db
+        (assoc :bucks new-bucks)
+        (assoc :is-add-admin-alert-open true))))
+
+(re-frame/reg-event-db
+  :user-bucks-input-change
+  (fn [db [_ new-user-bucks-value]]
+    (assoc db :new-bucks new-user-bucks-value)))
+
+(re-frame/reg-event-db
+  :selected-new-user
+  (fn [db [_ selected-new-user]]
+    (assoc db :selected-new-user selected-new-user)))
 
