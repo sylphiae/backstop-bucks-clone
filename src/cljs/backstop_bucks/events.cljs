@@ -32,7 +32,8 @@
   (fn [db _]
     (-> db
     (assoc :page admin-add-page)
-    (assoc :is-add-admin-alert-open false))))
+    (assoc :is-add-admin-alert-open false)
+    (assoc :is-add-new-reward-alert-open false))))
 
 (re-frame/reg-event-db
   :home-nav-click
@@ -147,6 +148,7 @@
   (fn [db [_ new-bucks selected-new-user]]
     (-> db
         (assoc :bucks new-bucks)
+        (assoc :is-add-new-reward-alert-open false)
         (assoc :is-add-admin-alert-open true))))
 
 (re-frame/reg-event-db
@@ -158,4 +160,27 @@
   :selected-new-user
   (fn [db [_ selected-new-user]]
     (assoc db :selected-new-user selected-new-user)))
+
+(re-frame/reg-event-db
+  :new-reward-bucks-input-change
+  (fn [db [_ new-reward-bucks-value]]
+    (assoc db :new-reward-bucks new-reward-bucks-value)))
+
+(re-frame/reg-event-db
+  :new-reward-name-input-change
+  (fn [db [_ new-reward-name-value]]
+    (assoc db :new-reward-name new-reward-name-value)))
+
+(re-frame/reg-event-db
+  :add-new-reward-click
+  (fn [db [_ new-reward-bucks new-reward-name]]
+    (-> db
+        (assoc-in [:all-rewards (count (:all-rewards db))] {:reward-name new-reward-name
+                                                            :price new-reward-bucks
+                                                            :reward-id (count (:all-rewards db))
+                                                            :reward-state :unredeemed})
+        (assoc :is-add-new-reward-alert-open true)
+        (assoc :is-add-admin-alert-open false))))
+
+
 

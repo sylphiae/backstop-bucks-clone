@@ -19,6 +19,16 @@
     (:new-bucks db)))
 
 (re-frame/reg-sub
+  ::new-reward-name
+  (fn [db]
+    (:new-reward-name db)))
+
+(re-frame/reg-sub
+  ::new-reward-bucks
+  (fn [db]
+    (:new-reward-bucks db)))
+
+(re-frame/reg-sub
   ::users
   (fn [db]
     (:users db)))
@@ -82,6 +92,11 @@
   ::is-bucks-alert-open
   (fn [db]
     (:is-bucks-alert-open db)))
+
+(re-frame/reg-sub
+  ::is-add-new-reward-alert-open
+  (fn [db]
+    (:is-add-new-reward-alert-open db)))
 
 (re-frame/reg-sub
   ::is-add-admin-alert-open

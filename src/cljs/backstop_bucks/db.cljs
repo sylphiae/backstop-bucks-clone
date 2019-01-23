@@ -7,6 +7,8 @@
    :name                        "Jenny"
    :bucks                       100
    :new-bucks                   0
+   :new-reward-bucks            0
+   :new-reward-name             ""
    :bucks-trade-amount          0
    :all-rewards                 [{:reward-name "Phone charger" :price 15 :reward-id 0 :reward-state :pending
                                   :requesters [{:name "Jenny"} {:name "Marth"} {:name "Ike"}]}
@@ -30,5 +32,6 @@
    :select-tradee-modal-id      0
    :grant-request-modal-id      0
    :is-bucks-alert-open         false
-   :is-add-admin-alert-open         false
+   :is-add-admin-alert-open     false
+   :is-add-new-reward-alert-open false
    })

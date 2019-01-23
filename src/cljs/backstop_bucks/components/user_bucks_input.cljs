@@ -4,7 +4,7 @@
             [reagent.core :as reagent :refer [atom with-let]]))
 
 ;This component is for admins to input backstop bucks to users
-(defn user-bucks-input []:user-bucks-input-change
+(defn user-bucks-input []
         (reagent/with-let [new-bucks (re-frame/subscribe [::subs/new-bucks])
                            ]
            [:div.name-input
