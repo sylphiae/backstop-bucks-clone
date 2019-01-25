@@ -7,10 +7,10 @@
 
 ;subscription to the current page
 (defn view-panel []
-      (let [page-view (re-frame/subscribe [::subs/page-view])]
-           [:div
-            [navbar {:color "primary" :dark true}]
-            (@page-view)]))
+  (let [page-view (re-frame/subscribe [::subs/page-view])]
+    [:div
+     [navbar {:color "primary" :dark true}]
+     (@page-view)]))
 
 (comment "Add nav bar
 Add page for viewing historical trades?")

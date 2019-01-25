@@ -9,10 +9,10 @@
                      selected-new-user (re-frame/subscribe [::subs/selected-new-user])]
     [:div
      [b/Col
-     (str "Please pick a new user.")]
+      (str "Please pick a new user.")]
      [b/Col {:sm "3"}
-     [b/Input {:type "select"
-               :value (:name @selected-new-user)
-               :on-change #(re-frame/dispatch [:selected-new-user (-> % .-target .-value)])}
+      [b/Input {:type "select"
+                :value (:name @selected-new-user)
+                :on-change #(re-frame/dispatch [:selected-new-user (-> % .-target .-value)])}
       ;% is javascript event
-      (map #(conj [:option] (:name %)) @users)]]]))
+       (map #(conj [:option] (:name %)) @users)]]]))

@@ -19,13 +19,15 @@
 (defn display-upcoming-tier [next-tier coll]
   (if (nil? next-tier)
     (str 6 ": $" (first (second coll)) "-" (second (second coll)))
-    (str (first next-tier)", for which the range is $" (first (second next-tier)) "-" (second (second next-tier)))))
+    (str (first next-tier) ", for which the range is $" (first (second next-tier)) "-" (second (second next-tier)))))
 
 (defn positions
   [pred coll]
   (keep-indexed (fn [idx x]
                   (when (pred x)
                     idx))
+
+
                 coll))
 
 

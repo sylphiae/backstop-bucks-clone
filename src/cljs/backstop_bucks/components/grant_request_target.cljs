@@ -9,10 +9,10 @@
                      selected-grant-target (re-frame/subscribe [::subs/selected-grant-target])]
     [:div
      [b/Col
-     (str "Who would you like to grant \"" (:grant-request-item props) "\" to?")]
+      (str "Who would you like to grant \"" (:grant-request-item props) "\" to?")]
      [b/Col {:sm "3"}
-     [b/Input {:type "select"
-               :value (:name @selected-grant-target)
-               :on-change #(re-frame/dispatch [:select-grant-target (-> % .-target .-value)])}
+      [b/Input {:type "select"
+                :value (:name @selected-grant-target)
+                :on-change #(re-frame/dispatch [:select-grant-target (-> % .-target .-value)])}
       ;% is javascript event
-      (map #(conj [:option] (:name %)) @grant-targets)]]]))
+       (map #(conj [:option] (:name %)) @grant-targets)]]]))

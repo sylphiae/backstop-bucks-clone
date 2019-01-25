@@ -13,7 +13,7 @@
                      is-registry-alert-open (re-frame/subscribe [::subs/is-registry-alert-open])
                      registry-alert-text (re-frame/subscribe [::subs/registry-alert-text])]
     [:div
-     [b/Alert {:color "danger" :isOpen @is-registry-alert-open } @registry-alert-text]
+     [b/Alert {:color "danger" :isOpen @is-registry-alert-open} @registry-alert-text]
      ;[b/Alert {:color "danger" :isOpen @is-password-mismatch-alert-open} "Your passwords do not match!"]
      ;[b/Alert {:color "danger" :isOpen @is-no-username-alert-open} "You need to input a username."]
      [b/Container
@@ -43,8 +43,7 @@
                   :placeholder "Enter your password again."
                   :value     @new-password-confirm
                   :on-change #(re-frame/dispatch [:new-password-confirm-input-change (-> % .-target .-value)])}]]
-       [action-button {
-                       :value [@new-password @new-password-confirm @new-display-name @new-username]
+       [action-button {:value [@new-password @new-password-confirm @new-display-name @new-username]
                        :event :register-click
                        :color "primary"} "Create account"]]]]))
 

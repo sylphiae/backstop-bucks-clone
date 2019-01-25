@@ -10,10 +10,10 @@
                      selected-trade-target (re-frame/subscribe [::subs/selected-trade-target])]
     [:div
      [b/Col
-     (str "Who would you like to trade \"" (:trade-category props) "\" with?")]
+      (str "Who would you like to trade \"" (:trade-category props) "\" with?")]
      [b/Col {:sm "3"}
-     [b/Input {:type "select"
-               :value (:name @selected-trade-target)
-               :on-change #(re-frame/dispatch [:select-trade-target (-> % .-target .-value)])}
+      [b/Input {:type "select"
+                :value (:name @selected-trade-target)
+                :on-change #(re-frame/dispatch [:select-trade-target (-> % .-target .-value)])}
       ;% is javascript event
-      (map #(conj [:option] (:name %)) (remove #(= {:name @user-name} %) @trade-targets))]]]))
+       (map #(conj [:option] (:name %)) (remove #(= {:name @user-name} %) @trade-targets))]]]))
