@@ -1,15 +1,21 @@
 (ns backstop-bucks.db
   (:require [backstop-bucks.views.user-home-page :refer [user-home-page]]
-            [backstop-bucks.views.admin-home-page :refer [admin-home-page]]))
+            [backstop-bucks.views.admin-home-page :refer [admin-home-page]]
+            [backstop-bucks.views.register :refer [register]]))
 
 (def default-db
-  {:page                        admin-home-page
+  {:page                        register
    :name                        "Jenny"
    :bucks                       100
    :new-bucks                   0
    :new-reward-bucks            0
    :new-reward-name             ""
+   :new-username                ""
+   :new-display-name            ""
+   :new-password                ""
+   :new-password-confirm        ""
    :bucks-trade-amount          0
+   :registry-alert-text         ""
    :all-rewards                 [{:reward-name "Phone charger" :price 15 :reward-id 0 :reward-state :pending
                                   :requesters [{:name "Jenny"} {:name "Marth"} {:name "Ike"}]}
                                  {:reward-name "Beer" :price 8 :reward-id 1 :reward-state :unredeemed}

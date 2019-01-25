@@ -172,6 +172,26 @@
     (assoc db :new-reward-name new-reward-name-value)))
 
 (re-frame/reg-event-db
+  :new-username-input-change
+  (fn [db [_ new-username-value]]
+    (assoc db :new-username new-username-value)))
+
+(re-frame/reg-event-db
+  :new-display-name-input-change
+  (fn [db [_ new-display-name-value]]
+    (assoc db :new-display-name new-display-name-value)))
+
+(re-frame/reg-event-db
+  :new-password-input-change
+  (fn [db [_ new-password-value]]
+    (assoc db :new-password new-password-value)))
+
+(re-frame/reg-event-db
+  :new-password-confirm-input-change
+  (fn [db [_ new-password-confirm-value]]
+    (assoc db :new-password-confirm new-password-confirm-value)))
+
+(re-frame/reg-event-db
   :add-new-reward-click
   (fn [db [_ new-reward-bucks new-reward-name]]
     (-> db
@@ -181,6 +201,19 @@
                                                             :reward-state :unredeemed})
         (assoc :is-add-new-reward-alert-open true)
         (assoc :is-add-admin-alert-open false))))
+
+(re-frame/reg-event-db
+  :register-click
+  (fn [db [_ new-password new-password-confirm new-display-name new-username]]
+    (-> db
+        (cond->
+                (= "" new-username) (assoc :registry-alert-text "You did not enter a username.")
+                (not (= "" new-username)) (assoc  :is-registry-alert-text ""))
+        (cond-> (= "" new-display-name)
+                (assoc :new-display-name new-username))
+        (cond-> (= "" new-password) (assoc :is-registry-alert-text "You did not enter a password.")
+                (not (= new-password new-password-confirm)) (assoc :is-registry-alert-text "Your passwords do not match."))
+        (cond-> (= new-password new-password-confirm)  (assoc :page user-home-page)))))
 
 
 

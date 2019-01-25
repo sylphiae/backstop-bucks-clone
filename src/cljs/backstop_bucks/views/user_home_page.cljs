@@ -9,7 +9,7 @@
    ))
 
 (defn user-home-page []
-  (let [first-name (re-frame/subscribe [::subs/name])
+  (let [first-name (re-frame/subscribe [::subs/new-display-name])
         bucks (re-frame/subscribe [::subs/bucks])
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
         unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])

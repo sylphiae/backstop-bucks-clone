@@ -24,6 +24,26 @@
     (:new-reward-name db)))
 
 (re-frame/reg-sub
+  ::new-username
+  (fn [db]
+    (:new-username db)))
+
+(re-frame/reg-sub
+  ::new-password
+  (fn [db]
+    (:new-password db)))
+
+(re-frame/reg-sub
+  ::new-password-confirm
+  (fn [db]
+    (:new-password-confirm db)))
+
+(re-frame/reg-sub
+  ::new-display-name
+  (fn [db]
+    (:new-display-name db)))
+
+(re-frame/reg-sub
   ::new-reward-bucks
   (fn [db]
     (:new-reward-bucks db)))
@@ -77,6 +97,11 @@
   ::selected-new-user
   (fn [db]
     (:selected-new-user db)))
+
+(re-frame/reg-sub
+  ::registry-alert-text
+  (fn [db]
+    (:registry-alert-text db)))
 
 (re-frame/reg-sub
   ::is-select-tradee-modal-open
@@ -250,6 +275,12 @@
   (fn [[all-rewards grant-request-modal-id] _]
     ;(print grant-request-modal-id)
     (:requesters (some #(when (= grant-request-modal-id (:reward-id %)) %) all-rewards))))
+
+(re-frame/reg-sub
+  ::is-registry-alert-open
+  :<- [::registry-alert-text]
+  (fn [registry-alert-text]
+    (not (= "" registry-alert-text))))
 
 
 
