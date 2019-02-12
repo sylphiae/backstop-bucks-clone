@@ -8,13 +8,20 @@
                  [cljsjs/react "16.3.2-0"]
                  [cljsjs/react-dom "16.3.2-0"]
                  [cljsjs/react-transition-group "2.3.1-0"]
-                 [cljsjs/react-popper "0.10.4-0"]]
+                 [cljsjs/react-popper "0.10.4-0"]
 
-  :plugins [[lein-cljsbuild "1.1.7"]]
+                 [com.novemberain/monger "3.1.0"]
+                 [compojure "1.6.1"]
+                 [ring/ring-defaults "0.3.2"]]
+
+  :plugins [[lein-cljsbuild "1.1.7"]
+            [lein-ring "0.12.4"]]
 
   :min-lein-version "2.5.3"
 
   :source-paths ["src/clj" "src/cljs"]
+
+  :main backstop-bucks.core
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
@@ -22,12 +29,16 @@
   {:assets
    {"resources/public/css/site.min.css" "resources/public/css/spacelab.css"}}
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:css-dirs ["resources/public/css"]
+             :ring-handler backstop-bucks.handler/app}
+  :ring {:handler backstop-bucks.handler/app}
 
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
-                   [cljsjs/react-bootstrap "0.31.5-0"]]
+                   [cljsjs/react-bootstrap "0.31.5-0"]
+                   [javax.servlet/servlet-api "2.5"]
+                   [ring/ring-mock "0.3.2"]]
 
     :plugins      [[lein-cljsbuild "1.1.1"]
                    [lein-figwheel "0.5.16"]
