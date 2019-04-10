@@ -2,7 +2,7 @@
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [backstop-bucks.endpoints.user-endpoint :refer [get-user create-user]]
+            [backstop-bucks.endpoints.user-endpoint :refer [get-user create-user update-user delete-user]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-params]]))
 
 (defn is-authenticated [{user :user :as req}]
@@ -12,8 +12,8 @@
            (GET "/" [] "Hello World")
            (GET "/user/:id" [id req] get-user)
            (POST "/user" req create-user)
-           ;(PUT "/user/:id" [id req] update-user)
-           ;(DELETE "/user/:id" [id req] delete-user)
+           (PUT "/user/:id" [id req] update-user)
+           (DELETE "/user/:id" [id req] delete-user)
 
 
            (route/not-found "Not Found"))

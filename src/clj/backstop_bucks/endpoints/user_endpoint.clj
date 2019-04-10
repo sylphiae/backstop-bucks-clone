@@ -10,13 +10,20 @@
 ;(defn create-user [param]
 (defn create-user [{{id :id name :name} :params session :session user :user :as req}]
   (swap! fake-db assoc id name)
-  (status (response "Success") 200))
+  (response @fake-db))
+  ;(status (response "Success") 200))
 
+(defn update-user [{{id :id name :name} :params session :session user :user :as req}]
+  (if (nil? (:user (get @fake-db id)))
+    (status (response "Not Found") 404)
+    (do (swap! fake-db assoc id name)
+        (response @fake-db))))
 ;
 ;(defn update-user [{{user :user id :id} :params session :session user :user :as req}]
 ;  (let [document (assoc scorecard :owner user)
 ;        result (search-util/update "scorecard" document id)]
 ;    (response result)))
 ;
-;(defn delete-user [{user :user id :id}_]
-;  (response result))
+(defn delete-user [{{id :id} :params session :session :as req}]
+  (swap! fake-db dissoc id)
+  (response @fake-db))
