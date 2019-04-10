@@ -12,7 +12,9 @@
 
                  [com.novemberain/monger "3.1.0"]
                  [compojure "1.6.1"]
-                 [ring/ring-defaults "0.3.2"]]
+                 [ring/ring-defaults "0.3.2"]
+                 [ring/ring-json "0.4.0"]
+                 [ring/ring-jetty-adapter "1.6.3"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-ring "0.12.4"]]
