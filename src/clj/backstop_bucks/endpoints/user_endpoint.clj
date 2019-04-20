@@ -5,7 +5,8 @@
 (def fake-db (atom {"0" "Link" "1" "Metaknight"}))
 
 (defn get-user [{{id :id} :params session :session :as req}]
-  (response {:user (get @fake-db id)}))
+  (response
+    (database-methods/find-by-id id)))
 
 ;(defn create-user [param]
 (defn create-user [{{id :id name :name} :params session :session user :user :as req}]
@@ -18,12 +19,12 @@
     (status (response "Not Found") 404)
     (do (swap! fake-db assoc id name)
         (response @fake-db))))
-;
+
 ;(defn update-user [{{user :user id :id} :params session :session user :user :as req}]
 ;  (let [document (assoc scorecard :owner user)
 ;        result (search-util/update "scorecard" document id)]
 ;    (response result)))
-;
+
 (defn delete-user [{{id :id} :params session :session :as req}]
   (swap! fake-db dissoc id)
   (response @fake-db))

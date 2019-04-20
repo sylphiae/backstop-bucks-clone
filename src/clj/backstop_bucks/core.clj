@@ -8,12 +8,18 @@
 ;; using MongoOptions allows fine-tuning connection parameters,
 ;; like automatic reconnection (highly recommended for production environment)
 (defn -main [& args]
-  (jetty/run-jetty app {:port 3000})
+  (jetty/run-jetty app {:port 3000}))
 
-    ;(mc/insert-batch db "documentsdb (mg/get-db conn "monger-test")]" [{:_id 1 :first_name "John" :last_name "Lennon"}
-    ;                                 {:_id 2 :first_name "Paul" :last_name "McCartney"}])
-    ;(print (mc/find-maps db "documents" {:first_name "John"}))
-    )
+  ;(let [^MongoOptions opts (mg/mongo-options {:threads-allowed-to-block-for-connection-multiplier 300})
+  ;      ^ServerAddress sa (mg/server-address "127.0.0.1" 27017)
+  ;      conn (mg/connect sa opts)
+  ;      _ (prn "something")
+  ;      db (mg/get-db conn "test")]
+  ;
+  ;  (mc/insert-batch db "documents" [{:_id 1 :first_name "John" :last_name "Lennon"}
+  ;                                   {:_id 2 :first_name "Paul" :last_name "McCartney"}])
+  ;  (print (mc/find-maps db "documents" {:first_name "John"}))
+  ;  ))
 
 (comment "List of endpoints to have:
 POST request for adding users
