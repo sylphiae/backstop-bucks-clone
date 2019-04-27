@@ -2,8 +2,6 @@
   (:require [ring.util.response :refer [response status]]
             [backstop-bucks.util.database-methods :as database-methods]))
 
-(def fake-db (atom {"0" "Link" "1" "Metaknight"}))
-
 (defn get-user [{{id :id} :params session :session :as req}]
   (response
     (database-methods/find-by-id id)))

@@ -14,7 +14,12 @@
                  [compojure "1.6.1"]
                  [ring/ring-defaults "0.3.2"]
                  [ring/ring-json "0.4.0"]
-                 [ring/ring-jetty-adapter "1.6.3"]]
+                 [ring/ring-jetty-adapter "1.6.3"]
+
+                 [clojure-future-spec "1.9.0-beta4"]
+                 [org.clojure/test.check "0.9.0"]
+                 [circleci/bond "0.3.0"]
+                 [cloverage "1.0.9"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-ring "0.12.4"]]
