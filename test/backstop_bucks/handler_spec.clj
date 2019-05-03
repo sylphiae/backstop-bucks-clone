@@ -36,5 +36,34 @@
         (is (= 200
               (response :status)))
         (is (= {:name "Kirby" :_id 0}
-               (response :body)))))))
+               (response :body))))))
+    (testing "with a post"
+      (with-redefs [create-user (fn [x y])]
+        (let [response (handler/app-routes (test-get :post "/user" {:name "Link" :_id 1}))]
+          (is (= 200
+                 (response :status)))))))
+    (testing "with a put"
+      (testing "that successfully finds a user"
+        (with-redefs [update-user (fn [x y])
+                      find-by-id (fn [x] {:name "Link" :_id 1})]
+          (let [response (handler/app-routes (test-get :put "/user/1" {:name "Marth" :_id 1}))]
+            (is (= 200 (response :status))))))
+      (testing "without finding a user"
+        (with-redefs [update-user (fn [x y])
+                      find-by-id (fn [x] [])]
+          (let [response (handler/app-routes (test-get :put "/user/1" {:name "Marth" :_id 1}))]
+            (is (= 404 (response :status)))))))
+    (testing "with a delete"
+      (with-redefs [delete-user (fn [x])]
+        (let [response (handler/app-routes (test-get :delete "/user/1" {}))]
+          (is (= 200 (response :status))))))
+
+  (testing "the rewards endpoint"
+    (testing "with a get"
+      (with-redefs [find-rewards-by-id (fn [x] {:_id 0 :price "100" :reward-name "Wii" :reward-state "unredeemed"})]
+        (let [response (handler/app-routes (test-get :get "/rewards/0" {}))]
+          (is (= 200
+                 (response :status)))
+          (is (= {:_id 0 :price "100" :reward-name "Wii" :reward-state "unredeemed"}
+                 (response :body)))))))
   )

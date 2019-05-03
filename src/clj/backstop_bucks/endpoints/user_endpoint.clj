@@ -12,8 +12,8 @@
   ;(status (response "Success") 200))
 
 (defn create-user [{{id :id name :name} :params session :session user :user :as req}]
-  (database-methods/create-user id name))
-  (status (response "Success") 200)
+  (database-methods/create-user id name)
+  (status (response "Success") 200))
 
 (defn update-user [{{id :id name :name} :params session :session user :user :as req}]
   (if (empty? (database-methods/find-by-id id))
