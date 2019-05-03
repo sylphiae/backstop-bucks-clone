@@ -11,7 +11,7 @@
   (status (response "Success") 200))
 
 (defn update-rewards [{{id :id price :price reward-name :reward-name reward-state :reward-state} :params session :session :as req}]
-  (if (empty? (database-methods/find-by-id id))
+  (if (empty? (database-methods/find-rewards-by-id id))
     (status (response "Not Found") 404)
     (do (database-methods/update-rewards id price reward-name reward-state)
         (status (response "Success") 200))))
