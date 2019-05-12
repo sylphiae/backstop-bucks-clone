@@ -1,26 +1,32 @@
 (ns backstop-bucks.events
   (:require
-   [re-frame.core :as re-frame]
-   [backstop-bucks.db :as db]
-   [backstop-bucks.views.user-trade :refer [user-trade]]
-   [backstop-bucks.views.user-home-page :refer [user-home-page]]
-   [backstop-bucks.views.admin-add-page :refer [admin-add-page]]
-   [backstop-bucks.views.upcoming-rewards-page :refer [upcoming-rewards-page]]
-   [backstop-bucks.util :as util]))
+    [re-frame.core :as re-frame]
+    [backstop-bucks.db :as db]
+    [backstop-bucks.views.user-trade :refer [user-trade]]
+    [backstop-bucks.views.user-home-page :refer [user-home-page]]
+    [backstop-bucks.views.admin-add-page :refer [admin-add-page]]
+    [backstop-bucks.views.upcoming-rewards-page :refer [upcoming-rewards-page]]
+    [backstop-bucks.util :as util]
+    [backstop-bucks.handlers]
+    [re-frame.core :as rf]
+    [ajax.core :as ajax]))
 
-(re-frame/reg-event-db
+(defn- get-reward [id db]
+  (prn db)
+  (some #(when (= (:_id %) id) %) db))
+
+(re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
-   db/default-db))
+   {:db db/default-db
+    :dispatch [:get-all-rewards-remote]}))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :trade-button-click
- (fn [db [_ redeemed-reward-id]]
-   (let [reward (some #(when (= (:reward-id %) redeemed-reward-id) %) (:all-rewards db))
-         all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
-     (-> db
-         (assoc-in [:all-rewards all-rewards-index :reward-state] :outgoing-trade)
-         (assoc :page user-trade)))))
+ (fn [{:keys [db]} [_ redeemed-reward-id]]
+   (let [reward (get-reward redeemed-reward-id (:all-rewards db))]
+     {:db (assoc db :page user-trade),
+      :dispatch [:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :outgoing-trade)]})))
 
 (re-frame/reg-event-db
  :trade-nav-click
@@ -45,37 +51,40 @@
  (fn [db _]
    (assoc db :page upcoming-rewards-page)))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :redeem-button-click
- (fn [db [_ redeemed-reward-id]]
-   (let [reward (some #(when (= (:reward-id %) redeemed-reward-id) %) (:all-rewards db))
-         all-rewards-index (first (util/positions #{reward} (:all-rewards db)))
+ (fn [{:keys [db]} [_ redeemed-reward-id]]
+   (let [reward (get-reward redeemed-reward-id (:all-rewards db))
          new-bucks (- (:bucks db) (:price reward redeemed-reward-id))]
-     (-> db
-         (assoc :bucks new-bucks)
-         (assoc-in [:all-rewards all-rewards-index :reward-state] :pending)))))
+     {:dispatch-n [[:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :pending)],
+                   [:update-user-remote 0 {:name "Link" :bucks new-bucks}]]})))
+;need to add back end functionality so that synchronous calls can be made
+;handler needed
 
 (re-frame/reg-event-db
  :reject-button-click
  (fn [db [_ rejected-reward-id]]
-   (let [reward (some #(when (= (:reward-id %) rejected-reward-id) %) (:all-rewards db))
+   (let [reward (some #(when (= (:_id %) rejected-reward-id) %) (:all-rewards db))
          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
      (assoc-in db [:all-rewards all-rewards-index :reward-state] :rejected))))
+;handler needed
 
 (re-frame/reg-event-db
  :remove-button-click
  (fn [db [_ rejected-reward-id]]
    (update-in db [:all-rewards] util/remove-item rejected-reward-id)
-    ;(remove #(= rejected-reward-id (:reward-id %)) (:all-rewards db))
+    ;(remove #(= rejected-reward-id (:_id %)) (:all-rewards db))
 ))
+;handler needed
 
 ;this event handler is going to do more when there is an actual database and other users to interact with
 (re-frame/reg-event-db
  :accept-button-click
  (fn [db [_ accepted-reward-id]]
-   (let [reward  (some #(when (= (:reward-id %) accepted-reward-id) %) (:all-rewards db))
+   (let [reward  (some #(when (= (:_id %) accepted-reward-id) %) (:all-rewards db))
          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
      (assoc-in db [:all-rewards all-rewards-index :reward-state] :redeemed))))
+;handler needed
 
 (re-frame/reg-event-db
  :bucks-input-change
@@ -97,6 +106,7 @@
          (assoc :bucks-trade-amount 0)
          (assoc :bucks (- (:bucks db) trade-value)))
      (assoc db :is-bucks-alert-open true))))
+;handler needed
 
 (re-frame/reg-event-db
  :select-tradee-click
@@ -111,6 +121,7 @@
    (-> db
        (assoc :is-grant-request-modal-open true)
        (assoc :grant-request-modal-id requested-reward-id))))
+;handler needed
 
 (re-frame/reg-event-db
  :select-tradee-modal-cancel-button-click
@@ -125,21 +136,23 @@
 (re-frame/reg-event-db
  :modal-trade-button-click
  (fn [db [_ outgoing-trade-id tradee]]
-   (let [reward (some #(when (= (:reward-id %) outgoing-trade-id) %) (:all-rewards db))
+   (let [reward (some #(when (= (:_id %) outgoing-trade-id) %) (:all-rewards db))
          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
      (-> db
          (assoc-in [:all-rewards all-rewards-index :tradee] (:name tradee))
          (assoc :is-select-tradee-modal-open false)))))
+;handler needed
 
 (re-frame/reg-event-db
  :grant-request-modal-button-click
  (fn [db [_ grant-request-id grantee]]
-   (let [reward (some #(when (= (:reward-id %) grant-request-id) %) (:all-rewards db))
+   (let [reward (some #(when (= (:_id %) grant-request-id) %) (:all-rewards db))
          all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
      (-> db
          (assoc-in [:all-rewards all-rewards-index :owner] (:name grantee))
          (assoc-in [:all-rewards all-rewards-index :reward-state] :redeemed)
          (assoc :is-grant-request-modal-open false)))))
+;handler needed
 
 ;this needs to do more when there is more than one user
 (re-frame/reg-event-db
@@ -149,6 +162,7 @@
        (assoc :bucks new-bucks)
        (assoc :is-add-new-reward-alert-open false)
        (assoc :is-add-admin-alert-open true))))
+;handler needed
 
 (re-frame/reg-event-db
  :user-bucks-input-change
@@ -164,6 +178,7 @@
  :new-reward-bucks-input-change
  (fn [db [_ new-reward-bucks-value]]
    (assoc db :new-reward-bucks new-reward-bucks-value)))
+;handler needed
 
 (re-frame/reg-event-db
  :new-reward-name-input-change
@@ -196,10 +211,11 @@
    (-> db
        (assoc-in [:all-rewards (count (:all-rewards db))] {:reward-name new-reward-name
                                                            :price new-reward-bucks
-                                                           :reward-id (count (:all-rewards db))
+                                                           :_id (count (:all-rewards db))
                                                            :reward-state :unredeemed})
        (assoc :is-add-new-reward-alert-open true)
        (assoc :is-add-admin-alert-open false))))
+;handler needed
 
 (re-frame/reg-event-db
  :register-click
@@ -215,6 +231,8 @@
        (cond-> (= new-password new-password-confirm)  (assoc :page
 
                                                              user-home-page)))))
+
+;handler needed
 
 
 

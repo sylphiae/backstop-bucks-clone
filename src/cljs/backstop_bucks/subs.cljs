@@ -248,7 +248,7 @@
  :<- [::all-rewards]
  :<- [::grant-request-modal-id]
  (fn [[all-rewards grant-request-modal-id] _]
-   (:reward-name (some #(when (= (:reward-id %) grant-request-modal-id) %) all-rewards))))
+   (:reward-name (some #(when (= (:_id %) grant-request-modal-id) %) all-rewards))))
 
 (re-frame/reg-sub
  ::unredeemed-rewards-count
@@ -273,7 +273,7 @@
  :<- [::grant-request-modal-id]
  (fn [[all-rewards grant-request-modal-id] _]
     ;(print grant-request-modal-id)
-   (:requesters (some #(when (= grant-request-modal-id (:reward-id %)) %) all-rewards))))
+   (:requesters (some #(when (= grant-request-modal-id (:_id %)) %) all-rewards))))
 
 (re-frame/reg-sub
  ::is-registry-alert-open

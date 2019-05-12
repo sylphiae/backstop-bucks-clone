@@ -13,13 +13,13 @@
   (let [db (get-mongo-connection)]
     (mc/find-maps db "users" {:_id id})))
 
-(defn create-user [id name]
+(defn create-user [id name bucks]
   (let [db (get-mongo-connection)]
-    (mc/insert db "users" {:_id id :name name})))
+    (mc/insert db "users" {:_id id :name name :bucks bucks})))
 
-(defn update-user [id name]
+(defn update-user [id name bucks]
   (let [db (get-mongo-connection)]
-    (mc/update-by-id db "users" id {:_id id :name name})))
+    (mc/update-by-id db "users" id {:_id id :name name :bucks bucks})))
 
 (defn delete-user [id]
   (let [db (get-mongo-connection)]
@@ -28,6 +28,10 @@
 (defn find-rewards-by-id [id]
   (let [db (get-mongo-connection)]
     (mc/find-maps db "rewards" {:_id id})))
+
+(defn get-all-rewards []
+  (let [db (get-mongo-connection)]
+    (mc/find-maps db "rewards")))
 
 (defn create-rewards [id price reward-name reward-state]
   (let [db (get-mongo-connection)]

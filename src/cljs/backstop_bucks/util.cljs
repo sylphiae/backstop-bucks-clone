@@ -10,7 +10,7 @@
       [(first coll) props])))
 
 (defn remove-item [coll id]
-  (remove #(= id (:reward-id %)) coll))
+  (remove #(= id (:_id %)) coll))
 ;dissoc-in for maps
 
 (defn get-tier-end-value [bucks coll]

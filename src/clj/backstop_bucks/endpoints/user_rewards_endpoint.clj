@@ -6,6 +6,10 @@
   (response
     (database-methods/find-rewards-by-id id)))
 
+(defn get-all-rewards [_]
+  (response
+    (database-methods/get-all-rewards)))
+
 (defn create-rewards [{{id :id price :price reward-name :reward-name reward-state :reward-state} :params session :session :as req}]
   (database-methods/create-rewards id price reward-name reward-state)
   (status (response "Success") 200))
