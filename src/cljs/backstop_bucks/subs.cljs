@@ -4,14 +4,9 @@
    [backstop-bucks.util :as util]))
 
 (re-frame/reg-sub
- ::name
- (fn [db]
-   (:name db)))
-
-(re-frame/reg-sub
- ::bucks
- (fn [db]
-   (:bucks db)))
+  ::current-user-id
+  (fn [db]
+    (:current-user-id db)))
 
 (re-frame/reg-sub
  ::new-bucks
@@ -138,6 +133,20 @@
  (fn [db]
    (:grant-request-modal-id db)))
 ;; --------------------------------------------------------
+
+(re-frame/reg-sub
+  ::name
+  :<- [::users]
+  :<- [::current-user-id]
+  (fn [[users id] _]
+    (util/get-current-user-name id users)))
+
+(re-frame/reg-sub
+  ::bucks
+  :<- [::users]
+  :<- [::current-user-id]
+  (fn [[users id] _]
+    (util/get-current-user-bucks id users)))
 
 (re-frame/reg-sub
  ::admin-rewards

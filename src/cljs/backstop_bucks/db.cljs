@@ -5,8 +5,7 @@
 
 (def default-db
   {:page                        register
-   :name                        "Jenny"
-   :bucks                       100
+   :current-user-id             "0"
    :new-bucks                   0
    :new-reward-bucks            0
    :new-reward-name             ""
@@ -27,7 +26,7 @@
    ;                              {:reward-name "Pen" :price 40 :trader "Link" :_id 6 :reward-state :pending-trade}
    ;                              {:reward-name "Book" :price 28 :_id 7 :reward-state :outgoing-trade}]
 
-   :users                       [{:name "Jenny"} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
+   :users                       [{:_id "0" :name "Jenny" :bucks 100} {:name "Wii Fit Trainer"} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
    :tiers                       {:1 [0 101] :2 [101 501] :3 [501 1001] :4 [1001 5001] :5 [5001 10001] :6 [10001 100001]}
    ;bucks
    :trade-requests              []

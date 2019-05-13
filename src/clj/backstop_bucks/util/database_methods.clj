@@ -11,7 +11,7 @@
 
 (defn find-by-id [id]
   (let [db (get-mongo-connection)]
-    (mc/find-maps db "users" {:_id id})))
+    (mc/find-one-as-map db "users" {:_id id})))
 
 (defn create-user [id name bucks]
   (let [db (get-mongo-connection)]

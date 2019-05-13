@@ -52,7 +52,7 @@
                   :timeout          5000
                   :response-format  (ajax/text-response-format)
                   :format           (ajax/json-request-format)
-                  :on-success       [:get-all-users-remote]
+                  :on-success       [:get-user-remote id]
                   :params           body}}))
 
 (rf/reg-event-db
@@ -64,7 +64,7 @@
 (rf/reg-event-db
   :update-user
   (fn [db [_ id state]]
-      (assoc-in db [:users id] state)))
+    (assoc-in db [:users (int id)] state)))
 
 
 

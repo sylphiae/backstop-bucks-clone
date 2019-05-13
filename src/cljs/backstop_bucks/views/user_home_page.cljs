@@ -8,7 +8,7 @@
    [backstop-bucks.components.basic-table :refer [basic-table]]))
 
 (defn user-home-page []
-  (let [first-name (re-frame/subscribe [::subs/new-display-name])
+  (let [first-name (re-frame/subscribe [::subs/name])
         bucks (re-frame/subscribe [::subs/bucks])
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
         unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])

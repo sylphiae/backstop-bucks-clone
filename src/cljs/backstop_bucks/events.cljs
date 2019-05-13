@@ -55,11 +55,12 @@
  :redeem-button-click
  (fn [{:keys [db]} [_ redeemed-reward-id]]
    (let [reward (get-reward redeemed-reward-id (:all-rewards db))
-         new-bucks (- (:bucks db) (:price reward redeemed-reward-id))]
+         id (:current-user-id db)
+         users (:users db)
+         new-bucks (- (util/get-current-user-bucks id users) (:price reward redeemed-reward-id))]
      {:dispatch-n [[:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :pending)],
-                   [:update-user-remote 0 {:name "Link" :bucks new-bucks}]]})))
+                   [:update-user-remote id {:name (util/get-current-user-name id users) :bucks new-bucks}]]})))
 ;need to add back end functionality so that synchronous calls can be made
-;handler needed
 
 (re-frame/reg-event-db
  :reject-button-click
