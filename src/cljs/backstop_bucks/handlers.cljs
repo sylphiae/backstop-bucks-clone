@@ -36,6 +36,17 @@
                   :params           body}}))
 
 (rf/reg-event-fx
+  :delete-rewards-remote
+  (fn [_ [_ id body]]
+    {:http-xhrio {:method           :delete
+                  :uri              (str "/rewards/" id)
+                  :timeout          5000
+                  :response-format  (ajax/text-response-format)
+                  :format           (ajax/json-request-format)
+                  :on-success       [:get-all-rewards-remote]
+                  :params           body}}))
+
+(rf/reg-event-fx
   :get-user-remote
   (fn [_ [_ id]]
     {:http-xhrio {:method           :get

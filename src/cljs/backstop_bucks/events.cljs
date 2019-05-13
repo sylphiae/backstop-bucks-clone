@@ -62,21 +62,18 @@
                    [:update-user-remote id {:name (util/get-current-user-name id users) :bucks new-bucks}]]})))
 ;need to add back end functionality so that synchronous calls can be made
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :reject-button-click
- (fn [db [_ rejected-reward-id]]
-   (let [reward (some #(when (= (:_id %) rejected-reward-id) %) (:all-rewards db))
-         all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
-     (assoc-in db [:all-rewards all-rewards-index :reward-state] :rejected))))
-;handler needed
+ (fn [{:keys [db]} [_ rejected-reward-id]]
+   (let [reward (get-reward rejected-reward-id (:all-rewards db))]
+     {:dispatch [:update-rewards-remote rejected-reward-id (assoc reward :reward-state :rejected)]})))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :remove-button-click
- (fn [db [_ rejected-reward-id]]
-   (update-in db [:all-rewards] util/remove-item rejected-reward-id)
-    ;(remove #(= rejected-reward-id (:_id %)) (:all-rewards db))
+ (fn [{:keys [db]}  [_ rejected-reward-id]]
+   ;(update-in db [:all-rewards] util/remove-item rejected-reward-id)
+   {:dispatch [:delete-rewards-remote rejected-reward-id]}
 ))
-;handler needed
 
 ;this event handler is going to do more when there is an actual database and other users to interact with
 (re-frame/reg-event-db

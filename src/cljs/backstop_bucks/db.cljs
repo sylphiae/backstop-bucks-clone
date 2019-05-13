@@ -4,7 +4,7 @@
             [backstop-bucks.views.register :refer [register]]))
 
 (def default-db
-  {:page                        register
+  {:page                        admin-home-page
    :current-user-id             "0"
    :new-bucks                   0
    :new-reward-bucks            0
