@@ -11,14 +11,14 @@
 ;  (response @fake-db))
   ;(status (response "Success") 200))
 
-(defn create-user [{{id :id name :name bucks :bucks} :params session :session user :user :as req}]
-  (database-methods/create-user id name bucks)
+(defn create-user [{{id :id name :name bucks :bucks trades :trades} :params session :session user :user :as req}]
+  (database-methods/create-user id name bucks trades)
   (status (response "Success") 200))
 
-(defn update-user [{{id :id name :name bucks :bucks} :params session :session user :user :as req}]
+(defn update-user [{{id :id name :name bucks :bucks trades :trades} :params session :session user :user :as req}]
   (if (empty? (database-methods/find-by-id id))
     (status (response "Not Found") 404)
-    (do (database-methods/update-user id name bucks)
+    (do (database-methods/update-user id name bucks trades)
         (status (response "Success") 200))))
 
 ;(defn update-user [{{id :id name :name} :params session :session user :user :as req}]

@@ -6,6 +6,9 @@
 (defn get-current-user-name [id users]
   (:name (first (filter #(= id (:_id %)) users))))
 
+(defn get-current-user [id users]
+  (first (filter #(= id (:_id %)) users)))
+
 (defn clone-component [coll props]
   (if (map? (second coll))
     (update-in coll [1] #(merge % props))

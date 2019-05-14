@@ -13,13 +13,13 @@
   (let [db (get-mongo-connection)]
     (mc/find-one-as-map db "users" {:_id id})))
 
-(defn create-user [id name bucks]
+(defn create-user [id name bucks trades]
   (let [db (get-mongo-connection)]
-    (mc/insert db "users" {:_id id :name name :bucks bucks})))
+    (mc/insert db "users" {:_id id :name name :bucks bucks :trades trades})))
 
-(defn update-user [id name bucks]
+(defn update-user [id name bucks trades]
   (let [db (get-mongo-connection)]
-    (mc/update-by-id db "users" id {:_id id :name name :bucks bucks})))
+    (mc/update-by-id db "users" id {:_id id :name name :bucks bucks :trades trades})))
 
 (defn delete-user [id]
   (let [db (get-mongo-connection)]

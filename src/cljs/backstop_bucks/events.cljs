@@ -59,7 +59,7 @@
          users (:users db)
          new-bucks (- (util/get-current-user-bucks id users) (:price reward redeemed-reward-id))]
      {:dispatch-n [[:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :pending)],
-                   [:update-user-remote id {:name (util/get-current-user-name id users) :bucks new-bucks}]]})))
+                   [:update-user-remote id (assoc (util/get-current-user id users) :bucks new-bucks)]]})))
 ;need to add back end functionality so that synchronous calls can be made
 
 (re-frame/reg-event-fx
@@ -72,17 +72,14 @@
  :remove-button-click
  (fn [{:keys [db]}  [_ rejected-reward-id]]
    ;(update-in db [:all-rewards] util/remove-item rejected-reward-id)
-   {:dispatch [:delete-rewards-remote rejected-reward-id]}
-))
+   {:dispatch [:delete-rewards-remote rejected-reward-id]}))
 
 ;this event handler is going to do more when there is an actual database and other users to interact with
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :accept-button-click
- (fn [db [_ accepted-reward-id]]
-   (let [reward  (some #(when (= (:_id %) accepted-reward-id) %) (:all-rewards db))
-         all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
-     (assoc-in db [:all-rewards all-rewards-index :reward-state] :redeemed))))
-;handler needed
+ (fn [{:keys [db]}  [_ accepted-reward-id]]
+   (let [reward  (get-reward accepted-reward-id (:all-rewards db))]
+     {:dispatch [:update-rewards-remote accepted-reward-id (assoc reward :reward-state :redeemed)]})))
 
 (re-frame/reg-event-db
  :bucks-input-change
@@ -94,16 +91,18 @@
  (fn [db [_ trade-target-value]]
    (assoc db :selected-trade-target {:name trade-target-value})))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :trade-request-click
- (fn [db [_ trade-value trade-target]]
-   (if (<= trade-value (:bucks db))
-     (-> db
-         (assoc :is-bucks-alert-open false)
-         (assoc-in [:trade-requests (count (:trade-requests db))] {:trade-value trade-value :trade-target trade-target})
-         (assoc :bucks-trade-amount 0)
-         (assoc :bucks (- (:bucks db) trade-value)))
-     (assoc db :is-bucks-alert-open true))))
+ (fn [{:keys [db]}  [_ trade-value trade-target]]
+   (let [id (:current-user-id db)
+         users (:users db)
+         user (util/get-current-user id users)]
+   (if (<= trade-value (:bucks user))
+        {:db (assoc db :is-bucks-alert-open false)
+        :dispatch [:update-user-remote id (-> user
+                                               (assoc-in [:trades (count (:trades user))] {:trade-value trade-value :trade-target trade-target})
+                                               (assoc :bucks (- (:bucks user) trade-value)))]}
+        {:db (assoc db :is-bucks-alert-open true)}))))
 ;handler needed
 
 (re-frame/reg-event-db

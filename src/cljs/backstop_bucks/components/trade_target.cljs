@@ -16,4 +16,4 @@
                 :value (:name @selected-trade-target)
                 :on-change #(re-frame/dispatch [:select-trade-target (-> % .-target .-value)])}
       ;% is javascript event
-       (map #(conj [:option] (:name %)) (remove #(= {:name @user-name} %) @trade-targets))]]]))
+       (map #(conj [:option] (:name %)) (remove #(= (:name %) @user-name) @trade-targets))]]]))
