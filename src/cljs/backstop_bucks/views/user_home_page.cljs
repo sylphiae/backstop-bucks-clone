@@ -39,8 +39,8 @@
       [basic-table {:subscription-details [::subs/redeemed-rewards]
                     :column-names ["#" "Reward Name" "Reward Value"]
                     :column-keys [:reward-name :price]}
-       [action-button {:event :trade-button-click :color "primary"} "Trade"]
-       [select-tradee-modal {:is-open @is-modal-open :trade-event-handler :trade-button-modal-click :trade-event-cancel :is-user-page-select-tradee-modal-cancel-button-click}]]]]))
+       [action-button {:event :trade-button-click :color "primary"} "Trade"]]
+       [select-tradee-modal {:is-open @is-modal-open :trade-event-handler :trade-button-modal-click :trade-event-cancel :is-user-page-select-tradee-modal-cancel-button-click}]]]))
 
 (comment "Actions user can take while on this page:
 Click on Redeem rewards

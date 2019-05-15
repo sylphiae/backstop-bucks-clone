@@ -13,7 +13,7 @@
 
 (defn- get-reward [id db]
   (prn db)
-  (some #(when (= (:_id %) id) %) db))
+  (some #(when (= (:_id %) (str id)) %) db))
 
 (re-frame/reg-event-fx
  ::initialize-db
@@ -28,6 +28,7 @@
          id (:current-user-id db)
          users (:users db)
          user (util/get-current-user id users)]
+     (prn (str "Reward" reward))
      {:db (-> db
               (assoc :is-user-page-select-tradee-modal-open false)
               (assoc :page user-trade))
@@ -36,8 +37,10 @@
 
 (re-frame/reg-event-db
   :trade-button-click
-  (fn [db _]
-    (assoc db :is-user-page-select-tradee-modal-open true)))
+  (fn [db [_ redeemed-reward-id]]
+    (-> db
+        (assoc :is-user-page-select-tradee-modal-open true)
+        (assoc :select-tradee-modal-id redeemed-reward-id))))
 
 (re-frame/reg-event-db
  :trade-nav-click
