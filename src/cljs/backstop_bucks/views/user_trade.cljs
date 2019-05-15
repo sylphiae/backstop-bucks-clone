@@ -42,7 +42,7 @@
                     :column-names ["#" "Reward Name" "Reward Value" "Tradee"]
                     :column-keys [:reward-name :price :tradee]}
        [action-button {:event :select-tradee-click :color "primary"} "Select Tradee"]]
-      [select-tradee-modal {:is-open @is-modal-open}]]]))
+      [select-tradee-modal {:is-open @is-modal-open :trade-event-handler :modal-trade-button-click :trade-event-cancel :select-tradee-modal-cancel-button-click}]]]))
 
 (comment "Input the amount user would like to trade
 Select trade target

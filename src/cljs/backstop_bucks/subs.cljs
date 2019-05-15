@@ -104,6 +104,11 @@
    (:is-select-tradee-modal-open db)))
 
 (re-frame/reg-sub
+  ::is-user-page-select-tradee-modal-open
+  (fn [db]
+    (:is-user-page-select-tradee-modal-open db)))
+
+(re-frame/reg-sub
  ::is-grant-request-modal-open
  (fn [db]
    (:is-grant-request-modal-open db)))
@@ -133,6 +138,13 @@
  (fn [db]
    (:grant-request-modal-id db)))
 ;; --------------------------------------------------------
+
+(re-frame/reg-sub
+  ::selected-trade-reward
+  :<- [::select-tradee-modal-id]
+  :<- [::all-rewards]
+  (fn [[select-tradee-modal-id rewards] _]
+    (some #(when (= (:_id %) (str select-tradee-modal-id)) %) rewards)))
 
 (re-frame/reg-sub
   ::name

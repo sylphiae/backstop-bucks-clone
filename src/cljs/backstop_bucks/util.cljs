@@ -22,6 +22,10 @@
   (remove #(= id (:_id %)) coll))
 ;dissoc-in for maps
 
+(defn remove-reward [coll reward]
+  (remove #(= reward (:trade-reward %)) coll))
+;dissoc-in for maps
+
 (defn get-tier-end-value [bucks coll]
   (some #(when (> % bucks) %) (map second (vals coll))))
 

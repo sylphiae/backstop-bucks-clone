@@ -5,7 +5,8 @@
    [backstop-bucks.subs :as subs]
    [baking-soda.core :as b]
    [backstop-bucks.components.action-button :refer [action-button]]
-   [backstop-bucks.components.basic-table :refer [basic-table]]))
+   [backstop-bucks.components.basic-table :refer [basic-table]]
+   [backstop-bucks.components.select-tradee-modal :refer [select-tradee-modal]]))
 
 (defn user-home-page []
   (let [first-name (re-frame/subscribe [::subs/name])
@@ -13,7 +14,8 @@
         redeemed-rewards-count (re-frame/subscribe [::subs/redeemed-rewards-count])
         unredeemed-rewards-count (re-frame/subscribe [::subs/unredeemed-rewards-count])
         pending-rewards-count (re-frame/subscribe [::subs/pending-rewards-count])
-        all-rewards (re-frame/subscribe [::subs/all-rewards])]
+        all-rewards (re-frame/subscribe [::subs/all-rewards])
+        is-modal-open (re-frame/subscribe [::subs/is-user-page-select-tradee-modal-open])]
     [:div
      [b/Container
       [b/Row
@@ -37,7 +39,8 @@
       [basic-table {:subscription-details [::subs/redeemed-rewards]
                     :column-names ["#" "Reward Name" "Reward Value"]
                     :column-keys [:reward-name :price]}
-       [action-button {:event :trade-button-click :color "primary"} "Trade"]]]]))
+       [action-button {:event :trade-button-click :color "primary"} "Trade"]
+       [select-tradee-modal {:is-open @is-modal-open :trade-event-handler :trade-button-modal-click :trade-event-cancel :is-user-page-select-tradee-modal-cancel-button-click}]]]]))
 
 (comment "Actions user can take while on this page:
 Click on Redeem rewards

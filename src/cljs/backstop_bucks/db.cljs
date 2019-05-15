@@ -40,4 +40,5 @@
    :grant-request-modal-id      0
    :is-bucks-alert-open         false
    :is-add-admin-alert-open     false
-   :is-add-new-reward-alert-open false})
+   :is-add-new-reward-alert-open false
+   :is-user-page-select-tradee-modal-open false})

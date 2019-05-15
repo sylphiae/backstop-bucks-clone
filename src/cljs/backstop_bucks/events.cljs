@@ -22,11 +22,22 @@
     :dispatch [:get-all-rewards-remote]}))
 
 (re-frame/reg-event-fx
- :trade-button-click
- (fn [{:keys [db]} [_ redeemed-reward-id]]
-   (let [reward (get-reward redeemed-reward-id (:all-rewards db))]
-     {:db (assoc db :page user-trade),
-      :dispatch [:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :outgoing-trade)]})))
+ :trade-button-modal-click
+ (fn [{:keys [db]} [_ redeemed-reward-id selected-trade-target]]
+   (let [reward (get-reward redeemed-reward-id (:all-rewards db))
+         id (:current-user-id db)
+         users (:users db)
+         user (util/get-current-user id users)]
+     {:db (-> db
+              (assoc :is-user-page-select-tradee-modal-open false)
+              (assoc :page user-trade))
+      :dispatch-n [[:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :outgoing-trade)]
+                  [:update-user-remote id  (assoc-in user [:trades (count (:trades user))] {:trade-reward reward :trade-target selected-trade-target})]]})))
+
+(re-frame/reg-event-db
+  :trade-button-click
+  (fn [db _]
+    (assoc db :is-user-page-select-tradee-modal-open true)))
 
 (re-frame/reg-event-db
  :trade-nav-click
@@ -103,7 +114,6 @@
                                                (assoc-in [:trades (count (:trades user))] {:trade-value trade-value :trade-target trade-target})
                                                (assoc :bucks (- (:bucks user) trade-value)))]}
         {:db (assoc db :is-bucks-alert-open true)}))))
-;handler needed
 
 (re-frame/reg-event-db
  :select-tradee-click
@@ -118,7 +128,6 @@
    (-> db
        (assoc :is-grant-request-modal-open true)
        (assoc :grant-request-modal-id requested-reward-id))))
-;handler needed
 
 (re-frame/reg-event-db
  :select-tradee-modal-cancel-button-click
@@ -126,18 +135,27 @@
    (assoc db :is-select-tradee-modal-open false)))
 
 (re-frame/reg-event-db
+  :is-user-page-select-tradee-modal-cancel-button-click
+  (fn [db _]
+    (assoc db :is-user-page-select-tradee-modal-open false)))
+
+(re-frame/reg-event-db
  :grant-request-modal-cancel-button-click
  (fn [db _]
    (assoc db :is-grant-request-modal-open false)))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :modal-trade-button-click
- (fn [db [_ outgoing-trade-id tradee]]
-   (let [reward (some #(when (= (:_id %) outgoing-trade-id) %) (:all-rewards db))
-         all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
-     (-> db
-         (assoc-in [:all-rewards all-rewards-index :tradee] (:name tradee))
-         (assoc :is-select-tradee-modal-open false)))))
+ (fn [{:keys [db]} [_ outgoing-trade-id tradee]]
+   (let [reward (get-reward outgoing-trade-id (:all-rewards db))
+         users (:users db)
+         user (util/get-current-user (:current-user-id db) users)
+         trade-index (first (util/positions #{reward} (:trades user)))
+         trade (some #(when (= (:trade-reward %) reward) %) (:trades user))]
+     {:db (assoc db :is-select-tradee-modal-open false)
+      :dispatch [:update-user-remote (:current-user-id db) (assoc-in user [:trades trade-index] {:trade-reward reward :trade-target tradee})]
+      })))
+
 ;handler needed
 
 (re-frame/reg-event-db
