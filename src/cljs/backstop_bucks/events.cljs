@@ -234,7 +234,6 @@
                                      :reward-state "unredeemed"
                                      :requesters []
                                      :owner nil}]}))
-;handler needed
 
 (re-frame/reg-event-db
  :register-click
@@ -247,11 +246,7 @@
          (assoc :new-display-name new-username))
        (cond-> (= "" new-password) (assoc :is-registry-alert-text "You did not enter a password.")
                (not (= new-password new-password-confirm)) (assoc :is-registry-alert-text "Your passwords do not match."))
-       (cond-> (= new-password new-password-confirm)  (assoc :page
-
-                                                             user-home-page)))))
-
-;handler needed
+       (cond-> (= new-password new-password-confirm)  (assoc :page user-home-page)))))
 
 
 
