@@ -170,25 +170,25 @@
  ::unrequested-rewards
  :<- [::admin-rewards]
  (fn [admin-rewards]
-   (remove #(= :pending (:reward-state %)) admin-rewards)))
+   (remove #(= "pending" (:reward-state %)) admin-rewards)))
 
 (re-frame/reg-sub
  ::redeemed-rewards
  :<- [::all-rewards]
  (fn [all-rewards]
-   (filter #(= :redeemed (:reward-state %)) all-rewards)))
+   (filter #(= "redeemed" (:reward-state %)) all-rewards)))
 
 (re-frame/reg-sub
  ::pending-rewards
  :<- [::all-rewards]
  (fn [all-rewards]
-   (filter #(= :pending (:reward-state %)) all-rewards)))
+   (filter #(= "pending" (:reward-state %)) all-rewards)))
 
 (re-frame/reg-sub
  ::unredeemed-rewards
  :<- [::all-rewards]
  (fn [all-rewards]
-   (filter #(= :unredeemed (:reward-state %)) all-rewards)))
+   (filter #(= "unredeemed" (:reward-state %)) all-rewards)))
 
 (re-frame/reg-sub
  ::redeemed-rewards-count
@@ -201,7 +201,7 @@
  ::pending-trades
  :<- [::all-rewards]
  (fn [all-rewards]
-   (filter #(= :pending-trade (:reward-state %)) all-rewards)))
+   (filter #(= "pending-trade" (:reward-state %)) all-rewards)))
 
 (re-frame/reg-sub
  ::outgoing-trades
@@ -213,7 +213,8 @@
         (map #(-> {}
                  (assoc :tradee (:name (:trade-target %)))
                  (assoc :price (:price (:trade-reward %)))
-                 (assoc :reward-name (:reward-name (:trade-reward %))))))))
+                 (assoc :reward-name (:reward-name (:trade-reward %)))
+                 (assoc :_id (:_id (:trade-reward %))))))))
 
 (re-frame/reg-sub
  ::pending-trades-count
@@ -274,7 +275,7 @@
  :<- [::all-rewards]
  :<- [::grant-request-modal-id]
  (fn [[all-rewards grant-request-modal-id] _]
-   (:reward-name (some #(when (= (:_id %) grant-request-modal-id) %) all-rewards))))
+   (:reward-name (util/get-reward grant-request-modal-id all-rewards))))
 
 (re-frame/reg-sub
  ::unredeemed-rewards-count
@@ -298,8 +299,7 @@
  :<- [::all-rewards]
  :<- [::grant-request-modal-id]
  (fn [[all-rewards grant-request-modal-id] _]
-    ;(print grant-request-modal-id)
-   (:requesters (some #(when (= grant-request-modal-id (:_id %)) %) all-rewards))))
+   (:requesters (some #(when (= (str grant-request-modal-id) (:_id %)) %) all-rewards))))
 
 (re-frame/reg-sub
  ::is-registry-alert-open

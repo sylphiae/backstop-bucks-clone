@@ -4,7 +4,7 @@
             [backstop-bucks.views.register :refer [register]]))
 
 (def default-db
-  {:page                        user-home-page
+  {:page                        admin-home-page
    :current-user-id             "0"
    :new-bucks                   0
    :new-reward-bucks            0
@@ -27,7 +27,7 @@
    ;                              {:reward-name "Book" :price 28 :_id 7 :reward-state :outgoing-trade}]
 
    :users                       [{:_id "0" :name "Jenny" :bucks 100
-                                  :trades [{:trade-reward { :_id "12":reward-name "Strawberry" :price 10, :reward-state "redeemed" }
+                                  :trades [{:trade-reward { :_id "12":reward-name "Strawberry" :price 10, :reward-state "outgoing-trade" }
                                              :trade-target { :name "Wii Fit Trainer" :trades []}}]} {:name "Wii Fit Trainer" :trades []} {:name "Link"} {:name "Kirby"} {:name "Zelda"}]
    :tiers                       {:1 [0 101] :2 [101 501] :3 [501 1001] :4 [1001 5001] :5 [5001 10001] :6 [10001 100001]}
    ;bucks

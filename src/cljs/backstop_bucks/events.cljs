@@ -11,10 +11,6 @@
     [re-frame.core :as rf]
     [ajax.core :as ajax]))
 
-(defn- get-reward [id db]
-  (prn db)
-  (some #(when (= (:_id %) (str id)) %) db))
-
 (re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
@@ -24,16 +20,17 @@
 (re-frame/reg-event-fx
  :trade-button-modal-click
  (fn [{:keys [db]} [_ redeemed-reward-id selected-trade-target]]
-   (let [reward (get-reward redeemed-reward-id (:all-rewards db))
+   (let [reward (util/get-reward redeemed-reward-id (:all-rewards db))
          id (:current-user-id db)
          users (:users db)
-         user (util/get-current-user id users)]
+         user (util/get-current-user id users)
+         new-reward (assoc reward :reward-state "outgoing-trade")]
      (prn (str "Reward" reward))
      {:db (-> db
               (assoc :is-user-page-select-tradee-modal-open false)
               (assoc :page user-trade))
-      :dispatch-n [[:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :outgoing-trade)]
-                  [:update-user-remote id  (assoc-in user [:trades (count (:trades user))] {:trade-reward reward :trade-target selected-trade-target})]]})))
+      :dispatch-n [[:update-rewards-remote redeemed-reward-id new-reward]
+                  [:update-user-remote id  (assoc-in user [:trades (count (:trades user))] {:trade-reward new-reward :trade-target selected-trade-target})]]})))
 
 (re-frame/reg-event-db
   :trade-button-click
@@ -68,18 +65,21 @@
 (re-frame/reg-event-fx
  :redeem-button-click
  (fn [{:keys [db]} [_ redeemed-reward-id]]
-   (let [reward (get-reward redeemed-reward-id (:all-rewards db))
+   (let [reward (util/get-reward redeemed-reward-id (:all-rewards db))
          id (:current-user-id db)
          users (:users db)
+         current-user (util/get-current-user id users)
          new-bucks (- (util/get-current-user-bucks id users) (:price reward redeemed-reward-id))]
-     {:dispatch-n [[:update-rewards-remote redeemed-reward-id (assoc reward :reward-state :pending)],
+     {:dispatch-n [[:update-rewards-remote redeemed-reward-id (-> reward
+                                                                  (assoc :reward-state :pending)
+                                                                  (assoc-in [:requesters (count (:requesters reward))] current-user))]
                    [:update-user-remote id (assoc (util/get-current-user id users) :bucks new-bucks)]]})))
 ;need to add back end functionality so that synchronous calls can be made
 
 (re-frame/reg-event-fx
  :reject-button-click
  (fn [{:keys [db]} [_ rejected-reward-id]]
-   (let [reward (get-reward rejected-reward-id (:all-rewards db))]
+   (let [reward (util/get-reward rejected-reward-id (:all-rewards db))]
      {:dispatch [:update-rewards-remote rejected-reward-id (assoc reward :reward-state :rejected)]})))
 
 (re-frame/reg-event-fx
@@ -92,7 +92,7 @@
 (re-frame/reg-event-fx
  :accept-button-click
  (fn [{:keys [db]}  [_ accepted-reward-id]]
-   (let [reward  (get-reward accepted-reward-id (:all-rewards db))]
+   (let [reward  (util/get-reward accepted-reward-id (:all-rewards db))]
      {:dispatch [:update-rewards-remote accepted-reward-id (assoc reward :reward-state :redeemed)]})))
 
 (re-frame/reg-event-db
@@ -150,16 +150,14 @@
 (re-frame/reg-event-fx
  :modal-trade-button-click
  (fn [{:keys [db]} [_ outgoing-trade-id tradee]]
-   (let [reward (get-reward outgoing-trade-id (:all-rewards db))
+   (let [reward (util/get-reward outgoing-trade-id (:all-rewards db))
          users (:users db)
          user (util/get-current-user (:current-user-id db) users)
-         trade-index (first (util/positions #{reward} (:trades user)))
+         rewards (map :trade-reward (:trades user))
+         trade-index (first (util/positions #{reward} rewards))
          trade (some #(when (= (:trade-reward %) reward) %) (:trades user))]
      {:db (assoc db :is-select-tradee-modal-open false)
-      :dispatch [:update-user-remote (:current-user-id db) (assoc-in user [:trades trade-index] {:trade-reward reward :trade-target tradee})]
-      })))
-
-;handler needed
+      :dispatch [:update-user-remote (:current-user-id db) (assoc-in user [:trades trade-index] {:trade-reward reward :trade-target tradee})]})))
 
 (re-frame/reg-event-db
  :grant-request-modal-button-click

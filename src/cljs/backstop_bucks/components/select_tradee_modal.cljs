@@ -4,8 +4,7 @@
             [re-frame.core :as re-frame]
             [reagent.core :as reagent :refer [atom with-let]]
             [backstop-bucks.subs :as subs]
-            [backstop-bucks.components.action-button :refer [action-button]]
-            [backstop-bucks.db :as db]))
+            [backstop-bucks.components.action-button :refer [action-button]]))
 
 (defn select-tradee-modal [props]
   (reagent/with-let [select-tradee-modal-id (re-frame/subscribe [::subs/select-tradee-modal-id])

@@ -69,7 +69,7 @@
 (rf/reg-event-db
   :update-rewards
   (fn [db [_ state]]
-    (let [result (mapv #(assoc % :reward-state (keyword (:reward-state %))) state)]
+    (let [result (mapv #(assoc % :reward-state (:reward-state %)) state)]
       (assoc db :all-rewards result))))
 
 (rf/reg-event-db

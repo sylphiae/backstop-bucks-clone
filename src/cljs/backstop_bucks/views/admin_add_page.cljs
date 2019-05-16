@@ -6,7 +6,6 @@
             [backstop-bucks.components.new-reward-name-input :refer [new-reward-name-input]]
             [backstop-bucks.components.select-new-user-target :refer [select-new-user-target]]
             [backstop-bucks.components.action-button :refer [action-button]]
-            [backstop-bucks.components.grant-request-modal :refer [grant-request-modal]]
             [re-frame.core :as re-frame]
             [reagent.core :as reagent :refer [atom with-let]]))
 
