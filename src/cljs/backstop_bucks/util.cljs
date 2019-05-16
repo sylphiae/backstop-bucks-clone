@@ -1,7 +1,6 @@
 (ns backstop-bucks.util)
 
 (defn- get-reward [id db]
-  (prn db)
   (some #(when (= (:_id %) (str id)) %) db))
 
 (defn get-current-user-bucks [id users]

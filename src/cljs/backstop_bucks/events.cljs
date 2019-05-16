@@ -25,7 +25,6 @@
          users (:users db)
          user (util/get-current-user id users)
          new-reward (assoc reward :reward-state "outgoing-trade")]
-     (prn (str "Reward" reward))
      {:db (-> db
               (assoc :is-user-page-select-tradee-modal-open false)
               (assoc :page user-trade))
@@ -71,7 +70,7 @@
          current-user (util/get-current-user id users)
          new-bucks (- (util/get-current-user-bucks id users) (:price reward redeemed-reward-id))]
      {:dispatch-n [[:update-rewards-remote redeemed-reward-id (-> reward
-                                                                  (assoc :reward-state :pending)
+                                                                  (assoc :reward-state "pending")
                                                                   (assoc-in [:requesters (count (:requesters reward))] current-user))]
                    [:update-user-remote id (assoc (util/get-current-user id users) :bucks new-bucks)]]})))
 ;need to add back end functionality so that synchronous calls can be made
@@ -80,7 +79,7 @@
  :reject-button-click
  (fn [{:keys [db]} [_ rejected-reward-id]]
    (let [reward (util/get-reward rejected-reward-id (:all-rewards db))]
-     {:dispatch [:update-rewards-remote rejected-reward-id (assoc reward :reward-state :rejected)]})))
+     {:dispatch [:update-rewards-remote rejected-reward-id (assoc reward :reward-state "rejected")]})))
 
 (re-frame/reg-event-fx
  :remove-button-click
@@ -93,7 +92,7 @@
  :accept-button-click
  (fn [{:keys [db]}  [_ accepted-reward-id]]
    (let [reward  (util/get-reward accepted-reward-id (:all-rewards db))]
-     {:dispatch [:update-rewards-remote accepted-reward-id (assoc reward :reward-state :redeemed)]})))
+     {:dispatch [:update-rewards-remote accepted-reward-id (assoc reward :reward-state "redeemed")]})))
 
 (re-frame/reg-event-db
  :bucks-input-change
@@ -104,6 +103,11 @@
  :select-trade-target
  (fn [db [_ trade-target-value]]
    (assoc db :selected-trade-target {:name trade-target-value})))
+
+(re-frame/reg-event-db
+  :select-grant-target
+  (fn [db [_ grant-target-value]]
+    (assoc db :selected-grant-target  {:name grant-target-value})))
 
 (re-frame/reg-event-fx
  :trade-request-click
@@ -130,6 +134,7 @@
  (fn [db [_ requested-reward-id]]
    (-> db
        (assoc :is-grant-request-modal-open true)
+       (assoc :selected-grant-target (first (:requesters (util/get-reward requested-reward-id (:all-rewards db)))))
        (assoc :grant-request-modal-id requested-reward-id))))
 
 (re-frame/reg-event-db
@@ -159,16 +164,15 @@
      {:db (assoc db :is-select-tradee-modal-open false)
       :dispatch [:update-user-remote (:current-user-id db) (assoc-in user [:trades trade-index] {:trade-reward reward :trade-target tradee})]})))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :grant-request-modal-button-click
- (fn [db [_ grant-request-id grantee]]
-   (let [reward (some #(when (= (:_id %) grant-request-id) %) (:all-rewards db))
-         all-rewards-index (first (util/positions #{reward} (:all-rewards db)))]
-     (-> db
-         (assoc-in [:all-rewards all-rewards-index :owner] (:name grantee))
-         (assoc-in [:all-rewards all-rewards-index :reward-state] :redeemed)
-         (assoc :is-grant-request-modal-open false)))))
-;handler needed
+ (fn [{:keys [db]} [_ grant-request-id grantee]]
+   (let [reward (util/get-reward grant-request-id (:all-rewards db))]
+     (prn (str "Grantee" grantee))
+     {:db (assoc db :is-grant-request-modal-open false)
+      :dispatch [:update-rewards-remote grant-request-id (-> reward
+                                                              (assoc :reward-state "redeemed")
+                                                              (assoc :owner (:name grantee)))]})))
 
 ;this needs to do more when there is more than one user
 (re-frame/reg-event-db

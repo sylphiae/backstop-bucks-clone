@@ -7,6 +7,7 @@
 (defn grant-request-target [props]
   (reagent/with-let [grant-targets (re-frame/subscribe [::subs/grant-targets])
                      selected-grant-target (re-frame/subscribe [::subs/selected-grant-target])]
+    (prn (str "selected grant target" @selected-grant-target))
     [:div
      [b/Col
       (str "Who would you like to grant \"" (:grant-request-item props) "\" to?")]
