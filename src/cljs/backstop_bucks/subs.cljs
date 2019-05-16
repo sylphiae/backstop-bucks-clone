@@ -205,9 +205,15 @@
 
 (re-frame/reg-sub
  ::outgoing-trades
- :<- [::all-rewards]
- (fn [all-rewards]
-   (filter #(= :outgoing-trade (:reward-state %)) all-rewards)))
+ :<- [::users]
+ :<- [::current-user-id]
+ (fn [[users current-user-id] _]
+   (->> (:trades (util/get-current-user current-user-id users))
+        (filter #(not= nil (:trade-reward %)))
+        (map #(-> {}
+                 (assoc :tradee (:name (:trade-target %)))
+                 (assoc :price (:price (:trade-reward %)))
+                 (assoc :reward-name (:reward-name (:trade-reward %))))))))
 
 (re-frame/reg-sub
  ::pending-trades-count
@@ -219,7 +225,6 @@
 (re-frame/reg-sub
  ::outgoing-trades-count
  :<- [::outgoing-trades]
-
  (fn [outgoing-trades]
    (count outgoing-trades)))
 
