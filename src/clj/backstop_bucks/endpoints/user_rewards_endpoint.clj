@@ -10,7 +10,7 @@
   (response
     (database-methods/get-all-rewards)))
 
-(defn create-rewards [{{id :id price :price reward-name :reward-name reward-state :reward-state requesters :requesters owner :owner} :params session :session :as req}]
+(defn create-rewards [{{id :_id price :price reward-name :reward-name reward-state :reward-state requesters :requesters owner :owner} :params session :session :as req}]
   (database-methods/create-rewards id price reward-name reward-state requesters owner)
   (status (response "Success") 200))
 

@@ -175,14 +175,13 @@
                                                               (assoc :owner (:name grantee)))]})))
 
 ;this needs to do more when there is more than one user
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :set-bucks-click
- (fn [db [_ new-bucks selected-new-user]]
-   (-> db
-       (assoc :bucks new-bucks)
-       (assoc :is-add-new-reward-alert-open false)
-       (assoc :is-add-admin-alert-open true))))
-;handler needed
+ (fn [{:keys [db]} [_ new-bucks selected-new-user]]
+   (let [user (util/get-current-user (:current-user-id db) (:users db))]
+   {:db (-> db (assoc :is-add-new-reward-alert-open false)
+            (assoc :is-add-admin-alert-open true))
+    :dispatch [:update-user-remote (:current-user-id db) (assoc user :bucks new-bucks)]})))
 
 (re-frame/reg-event-db
  :user-bucks-input-change
@@ -198,7 +197,6 @@
  :new-reward-bucks-input-change
  (fn [db [_ new-reward-bucks-value]]
    (assoc db :new-reward-bucks new-reward-bucks-value)))
-;handler needed
 
 (re-frame/reg-event-db
  :new-reward-name-input-change
@@ -225,16 +223,17 @@
  (fn [db [_ new-password-confirm-value]]
    (assoc db :new-password-confirm new-password-confirm-value)))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :add-new-reward-click
- (fn [db [_ new-reward-bucks new-reward-name]]
-   (-> db
-       (assoc-in [:all-rewards (count (:all-rewards db))] {:reward-name new-reward-name
-                                                           :price new-reward-bucks
-                                                           :_id (count (:all-rewards db))
-                                                           :reward-state :unredeemed})
-       (assoc :is-add-new-reward-alert-open true)
-       (assoc :is-add-admin-alert-open false))))
+ (fn [{:keys [db]} [_ new-reward-bucks new-reward-name]]
+   {:db (-> db (assoc :is-add-new-reward-alert-open true)
+               (assoc :is-add-admin-alert-open false))
+   :dispatch [:create-rewards-remote {:reward-name new-reward-name
+                                     :price new-reward-bucks
+                                     :_id (count (:all-rewards db))
+                                     :reward-state "unredeemed"
+                                     :requesters []
+                                     :owner nil}]}))
 ;handler needed
 
 (re-frame/reg-event-db
