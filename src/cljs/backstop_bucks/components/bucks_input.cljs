@@ -10,6 +10,5 @@
      [:input {:type "text"
               :value @bucks-to-trade
               :on-change #(re-frame/dispatch [:bucks-input-change (-> % .-target
-
                                                                       .-value)])}]]))
 

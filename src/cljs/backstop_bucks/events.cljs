@@ -155,10 +155,10 @@
 (re-frame/reg-event-fx
  :modal-trade-button-click
  (fn [{:keys [db]} [_ outgoing-trade-id tradee]]
-   (let [reward (util/get-reward outgoing-trade-id (:all-rewards db))
-         users (:users db)
+   (let [users (:users db)
          user (util/get-current-user (:current-user-id db) users)
          rewards (map :trade-reward (:trades user))
+         reward (util/get-reward outgoing-trade-id rewards)
          trade-index (first (util/positions #{reward} rewards))
          trade (some #(when (= (:trade-reward %) reward) %) (:trades user))]
      {:db (assoc db :is-select-tradee-modal-open false)
@@ -168,7 +168,6 @@
  :grant-request-modal-button-click
  (fn [{:keys [db]} [_ grant-request-id grantee]]
    (let [reward (util/get-reward grant-request-id (:all-rewards db))]
-     (prn (str "Grantee" grantee))
      {:db (assoc db :is-grant-request-modal-open false)
       :dispatch [:update-rewards-remote grant-request-id (-> reward
                                                               (assoc :reward-state "redeemed")
